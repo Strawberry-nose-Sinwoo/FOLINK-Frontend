@@ -1,5 +1,5 @@
 ---
-name: "\U0001F680 [Feature] #번호 - 제목"
+name: "\U0001F680 Feature"
 about: Feature 이슈 템플릿입니다.
 title: ''
 labels: ''
