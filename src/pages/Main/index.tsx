@@ -1,6 +1,14 @@
+import { Toastify } from "@/allFiles"
 import styles from "./style.module.css"
 
 export default function Main() {
+    const toastOnClick = () => {
+        Toastify({
+        type: "loading",
+        message: "데이터를 불러오는 중입니다...",
+        });
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.main}>
@@ -14,7 +22,7 @@ export default function Main() {
                          type="file"
                          accept="application/pdf"
                         />
-                        <button>전송</button>
+                        <button onClick={toastOnClick}>전송</button>
                     </div>
                 </div>
             </div>
