@@ -26,7 +26,7 @@ export function Toastify({ message, type, position }: ToastProps) {
       case "loading":
         toast.loading(message, {
           ...toastConfig,
-        });
+        })
         return;
       default:
         toast(message, toastConfig);
