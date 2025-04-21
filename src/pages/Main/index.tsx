@@ -53,7 +53,7 @@ export default function Main() {
     setIsSubmitting(true);
     Toastify({
       type: 'loading',
-      message: '면접 질문을 불러오는 중입니다...',
+      message: '면접 질문을 불러오는 중입니다..',
     });
   };
 
