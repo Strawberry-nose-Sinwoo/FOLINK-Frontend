@@ -1,0 +1,28 @@
+.messages_list {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user_message,
+  .ai_message {
+    margin-bottom: 20px;
+    max-width: 80%;
+    background: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+  }
+  
+  .user_message {
+    align-self: flex-end;
+    border-radius: 16px 16px 0 16px;
+    background-color: var(--primary);
+    color: #fff;
+  }
+  
+  .ai_message {
+    align-self: flex-start;
+    border-radius: 16px 16px 16px 0;
+  }

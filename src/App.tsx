@@ -6,6 +6,7 @@ function App() {
   return (
       <Routes>
         <Route path={"/"} element={<R.Main />}/>
+        <Route path={"/chat"} element={<R.Chat />}/>
       </Routes>
   )
 }

@@ -16,7 +16,7 @@ const defaultToastOptions: ToastOptions = {
   transition: Slide,
 };
 
-export function Toastify({ message, type, position }: ToastProps) {
+export const Toastify = ({ message, type, position }: ToastProps) => {
   const toastConfig = {
     ...defaultToastOptions,
     position: position || defaultToastOptions.position,
