@@ -35,10 +35,11 @@ a {
 
 input {
   outline: none;
+}
 
-  &::placeholder {
-    font-weight: bolder;
-  }
+input::placeholder {
+  font-weight: bolder;
+  color: #bfbfbf;
 }
 
 button {
