@@ -10,7 +10,7 @@ interface MessageListProps {
 }
 
 const MessageList = ({ messages, currentTypingId, onEndTyping }: MessageListProps) => (
-  <div className={styles.messages_list}>
+  <section className={styles.messages_list}>
     {messages.map((message) =>
       message.isTyping && message.id === currentTypingId ? (
         <TypeAnimation
@@ -29,7 +29,7 @@ const MessageList = ({ messages, currentTypingId, onEndTyping }: MessageListProp
         </div>
       )
     )}
-  </div>
+  </section>
 );
 
 export default MessageList;

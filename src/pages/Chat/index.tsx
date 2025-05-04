@@ -7,19 +7,17 @@ const Chat = () => {
   const { message, currentTypingId, handleSendMessage, handleEndTyping } = useMessage();
 
   return (
-    <div className={styles.container}>
-      <nav className={styles.nav}>
-
-      </nav>
-      <main className={styles.main}>
-      <components.MessageList
-        messages={message}
-        currentTypingId={currentTypingId}
-        onEndTyping={handleEndTyping}
-      />
-      <components.MessageForm onSendMessage={handleSendMessage} />
-      </main>
-    </div>
+    <main className={styles.container}>
+      <nav className={styles.nav}></nav>
+      <section className={styles.main}>
+        <components.MessageList
+          messages={message}
+          currentTypingId={currentTypingId}
+          onEndTyping={handleEndTyping}
+        />
+        <components.MessageForm onSendMessage={handleSendMessage} />
+      </section>
+    </main>
   );
 };
 
