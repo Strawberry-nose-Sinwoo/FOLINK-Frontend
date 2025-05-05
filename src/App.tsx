@@ -1,13 +1,16 @@
 import * as R from "./allFiles"
 
-import { Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 function App() {
   return (
+    <Router>
       <Routes>
         <Route path={"/"} element={<R.Main />}/>
         <Route path={"/chat"} element={<R.Chat />}/>
       </Routes>
+    </Router>
+  
   )
 }
 
