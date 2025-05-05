@@ -8,7 +8,9 @@ const Chat = () => {
 
   return (
     <main className={styles.container}>
-      <nav className={styles.nav}></nav>
+      <nav className={styles.nav}>
+        
+      </nav>
       <section className={styles.main}>
         <components.MessageList
           messages={message}

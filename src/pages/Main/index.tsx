@@ -1,23 +1,19 @@
 import styles from './style.module.css';
+
 import { useState } from 'react';
 import { Toastify } from '@/allFiles';
 import { ArrowRight } from '@/assets';
 import { useFileUpload } from '@/hooks';
-import { postWithToken } from '@/api/auth'; 
 import { PostType } from '@/types';
-import { useMutation } from '@tanstack/react-query';
+import { useGenerateQuestion } from '@/hooks/useGenerateQuestion';
 
 const Main = () => {
   const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile } = useFileUpload();
   const [inputText, setInputText] = useState(''); 
+
   const toastId = 'question-generate-toast';
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: PostType) => {
-      const response = await postWithToken(null, '/question/generate-by-text', data);
-      return response;
-    },
-  })
+  const { mutate, isPending } = useGenerateQuestion();
 
   const handleSubmit = () => {
     if (isPending || !inputText.trim()) return;
@@ -77,12 +73,10 @@ const Main = () => {
                 style={{ display: 'none' }}
                 accept="application/pdf"
                 onChange={handleFileChange}
-                aria-label="PDF 파일 업로드"
               />
               <button
                 className={styles.pdf_btn}
                 onClick={handleClick}
-                aria-label={isFileSelected ? 'PDF 파일 삽입됨' : 'PDF 파일 삽입'}
                 disabled={isFileSelected}
               >
                 {isFileSelected ? '삽입됨' : '+ PDF 삽입'}
