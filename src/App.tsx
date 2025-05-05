@@ -8,6 +8,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<R.Main />}/>
         <Route path={"/chat"} element={<R.Chat />}/>
+        <Route path={"/question"} element={<R.Question />}/>
       </Routes>
     </Router>
   

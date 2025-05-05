@@ -6,11 +6,13 @@ import { useFileUpload } from '@/hooks';
 import { postWithToken } from '@/api/auth'; 
 import { PostType } from '@/types';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
   const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile } = useFileUpload();
   const [inputText, setInputText] = useState(''); 
   const toastId = 'question-generate-toast';
+  const navigation = useNavigate()
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: PostType) => {
@@ -42,6 +44,9 @@ const Main = () => {
             message: '질문 생성 완료!',
             toastId: toastId,
           });
+          setTimeout(() => {
+            navigation('/question', { state: response.data.projectQuestions })
+          }, 2000)
         },
         onError: (error) => {
           console.error('질문 생성 실패:', error);
