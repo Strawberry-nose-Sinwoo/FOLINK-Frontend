@@ -62,3 +62,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.back_button {
+    width: 15px;
+    position: absolute;
+    top: 11%;
+    left: 25%;
+    cursor: pointer;
+}

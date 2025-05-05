@@ -44,9 +44,11 @@ const Main = () => {
             message: '질문 생성 완료!',
             toastId: toastId,
           });
+        
           setTimeout(() => {
-            navigation('/question', { state: response.data.projectQuestions })
-          }, 2000)
+            Toastify({ type: 'dismiss', toastId });
+            navigation('/question', { state: response.data.projectQuestions });
+          }, 2000);
         },
         onError: (error) => {
           console.error('질문 생성 실패:', error);

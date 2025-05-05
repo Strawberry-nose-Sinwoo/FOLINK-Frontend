@@ -1,5 +1,4 @@
-import { useState } from "react"
-import style from './style.module.css'
+import style from './style.module.css';
 
 interface ProjectQuestion {
     id: number;
@@ -9,21 +8,19 @@ interface ProjectQuestion {
 }
 
 interface QuestionProps {
-    Questions: ProjectQuestion[]
+    Questions: ProjectQuestion[];
 }
 
-const QuestionList = ({Questions}:QuestionProps) => {
+const QuestionList = ({ Questions }: QuestionProps) => {
     return (
         <ul className={style.list_box}>
-            {
-                Questions.map((index) => {
-                    return (
-                        <li className="">{index.question}</li>
-                    )
-                })
-            }
+            {Questions.map((item) => (
+                <li key={item.id}>
+                    {item.question}
+                </li>
+            ))}
         </ul>
-    )
-}
+    );
+};
 
-export default QuestionList
+export default QuestionList;
