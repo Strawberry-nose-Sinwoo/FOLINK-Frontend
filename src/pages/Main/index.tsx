@@ -2,53 +2,53 @@ import styles from './style.module.css';
 
 import { useState } from 'react';
 import { Toastify } from '@/allFiles';
-import { ArrowRight } from '@/assets';
+import { ArrowRight, Close } from '@/assets';
 import { useFileUpload } from '@/hooks';
 import { PostType } from '@/types';
 import { useGenerateQuestion } from '@/hooks/useGenerateQuestion';
 
 const Main = () => {
   const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile } = useFileUpload();
-  const [inputText, setInputText] = useState(''); 
-
-  const toastId = 'question-generate-toast';
-
   const { mutate, isPending } = useGenerateQuestion();
+  const [inputText, setInputText] = useState('');
+  const toastId = 'question-generate-toast';
 
   const handleSubmit = () => {
     if (isPending || !inputText.trim()) return;
     Toastify({
       type: 'dismiss',
       toastId: toastId,
-    })
-    
+    });
+
     Toastify({
       type: 'loading',
       message: '면접 질문을 불러오는 중입니다..',
-      toastId: toastId
+      toastId: toastId,
     });
 
-      const data: PostType = { text: inputText }; 
-      mutate(data, {
-        onSuccess: (response) => {
-          console.log('질문 추출 결과:', response);
-          Toastify({
-            type: 'update',
-            iconType: 'success',
-            message: '질문 생성이 완료되었습니다!',
-            toastId: toastId,
-            render: 'success', 
-          });
-        },
-        onError: (error) => {
-          console.error('질문 생성 실패:', error);
-          Toastify({
-            type: 'error',
-            message: '질문 생성에 실패했습니다.',
-          });
-        },
-      });
+    const data: PostType = { text: inputText };
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log('질문 추출 결과:', response);
+        Toastify({
+          type: 'update',
+          iconType: 'success',
+          message: '질문 생성이 완료되었습니다!',
+          toastId: toastId,
+          render: 'success',
+        });
+      },
+      onError: (error) => {
+        console.error('질문 생성 실패:', error);
+        Toastify({
+          type: 'error',
+          message: '질문 생성에 실패했습니다.',
+        });
+      },
+    });
   };
+
+  const selectedFileName = fileInputRef.current?.files?.[0]?.name || '';
 
   return (
     <main className={styles.container}>
@@ -63,38 +63,39 @@ const Main = () => {
             placeholder="포트폴리오 내용을 입력하세요."
             aria-label="포트폴리오 내용 입력"
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)} 
+            onChange={(e) => setInputText(e.target.value)}
           />
           <section className={styles.btn_container}>
-            <article>
+            <article className={styles.file_upload_container}>
               <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 accept="application/pdf"
                 onChange={handleFileChange}
               />
-              <button
-                className={styles.pdf_btn}
-                onClick={handleClick}
-                disabled={isFileSelected}
-              >
-                {isFileSelected ? '삽입됨' : '+ PDF 삽입'}
-              </button>
-              { isFileSelected && (
-                <button
-                  className={styles.reset_btn}
-                  onClick={resetFile}
-                  aria-label="파일 선택 초기화"
-                >
-                  초기화
+              {!isFileSelected && (
+                <button className={styles.pdf_btn} onClick={handleClick}>
+                  + PDF 삽입
                 </button>
+              )}
+              {isFileSelected && (
+                <div className={styles.file_info}>
+                  <span className={styles.file_name}>{selectedFileName}</span>
+                  <button className={styles.cancel_btn} onClick={resetFile}>
+                    <img 
+                      src={Close}
+                      alt="취소 버튼" 
+                      width={10} 
+                      height={10} />
+                  </button>
+                </div>
               )}
             </article>
             <button
               className={styles.send_btn}
               onClick={handleSubmit}
-              disabled={isPending || !inputText.trim()} 
+              disabled={isPending || !inputText.trim()}
             >
               <img
                 src={ArrowRight}

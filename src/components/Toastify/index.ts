@@ -24,7 +24,7 @@ export const Toastify = ({ message, type, iconType, position, toastId, render }:
     ...defaultToastOptions,
     position: position || defaultToastOptions.position,
     toastId: toastId || undefined,
-    type: iconType || 'default',
+    type: iconType,
   };
 
   switch (type) {

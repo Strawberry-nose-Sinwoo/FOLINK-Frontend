@@ -1,3 +1,3 @@
 import ArrowRight from './Arrow-Right.png';
-
-export { ArrowRight };
+import Close from './Close.png';
+export { ArrowRight, Close };
