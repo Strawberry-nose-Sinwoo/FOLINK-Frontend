@@ -3,18 +3,54 @@ import { useState } from 'react';
 import { Toastify } from '@/allFiles';
 import { ArrowRight } from '@/assets';
 import { useFileUpload } from '@/hooks';
+import { postWithToken } from '@/api/auth'; 
+import { PostType } from '@/types';
+import { useMutation } from '@tanstack/react-query';
 
 const Main = () => {
   const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile } = useFileUpload();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [inputText, setInputText] = useState(''); 
+  const toastId = 'question-generate-toast';
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: PostType) => {
+      const response = await postWithToken(null, '/question/generate-by-text', data);
+      return response;
+    },
+  })
 
   const handleSubmit = () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+    if (isPending || !inputText.trim()) return;
     Toastify({
-      type: "loading",
-      message: "면접 질문을 불러오는 중입니다..",
+      type: 'dismiss',
+      toastId: toastId,
+    })
+    
+    Toastify({
+      type: 'loading',
+      message: '면접 질문을 불러오는 중입니다..',
+      toastId: toastId
     });
+
+      const data: PostType = { text: inputText }; 
+      mutate(data, {
+        onSuccess: (response) => {
+          console.log('질문 추출 결과:', response);
+          Toastify({
+            type: 'update',
+            iconType: 'success',
+            message: '질문 생성 완료!',
+            toastId: toastId,
+          });
+        },
+        onError: (error) => {
+          console.error('질문 생성 실패:', error);
+          Toastify({
+            type: 'error',
+            message: '질문 생성에 실패했습니다.',
+          });
+        },
+      });
   };
 
   return (
@@ -29,6 +65,8 @@ const Main = () => {
             className={styles.chat_input}
             placeholder="포트폴리오 내용을 입력하세요."
             aria-label="포트폴리오 내용 입력"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)} 
           />
           <section className={styles.btn_container}>
             <article>
@@ -48,7 +86,7 @@ const Main = () => {
               >
                 {isFileSelected ? '삽입됨' : '+ PDF 삽입'}
               </button>
-              {isFileSelected && (
+              { isFileSelected && (
                 <button
                   className={styles.reset_btn}
                   onClick={resetFile}
@@ -61,8 +99,7 @@ const Main = () => {
             <button
               className={styles.send_btn}
               onClick={handleSubmit}
-              aria-label={isSubmitting ? '질문 생성 중' : '질문 생성'}
-              disabled={isSubmitting}
+              disabled={isPending || !inputText.trim()} 
             >
               <img
                 src={ArrowRight}
