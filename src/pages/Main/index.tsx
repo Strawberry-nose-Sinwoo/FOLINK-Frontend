@@ -39,8 +39,9 @@ const Main = () => {
           Toastify({
             type: 'update',
             iconType: 'success',
-            message: '질문 생성 완료!',
+            message: '질문 생성이 완료되었습니다!',
             toastId: toastId,
+            render: 'success', 
           });
         },
         onError: (error) => {
