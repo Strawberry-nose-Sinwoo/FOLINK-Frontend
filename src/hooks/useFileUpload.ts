@@ -5,6 +5,8 @@ export const useFileUpload = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
 
+  const selectedFileName = fileInputRef.current?.files?.[0]?.name || '';
+
   const handleClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -50,5 +52,6 @@ export const useFileUpload = () => {
     handleClick,
     handleFileChange,
     resetFile,
+    selectedFileName,
   };
 };

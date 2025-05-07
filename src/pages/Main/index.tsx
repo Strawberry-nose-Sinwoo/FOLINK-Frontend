@@ -5,12 +5,13 @@ import { Toastify } from '@/allFiles';
 import { ArrowRight, Close } from '@/assets';
 import { useFileUpload } from '@/hooks';
 import { PostType } from '@/types';
-import { useGenerateQuestion } from '@/hooks/useGenerateQuestion';
+import { useGenerateQuestion } from '@/hooks';
 
 const Main = () => {
-  const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile } = useFileUpload();
+  const { fileInputRef, isFileSelected, handleClick, handleFileChange, resetFile, selectedFileName } = useFileUpload();
   const { mutate, isPending } = useGenerateQuestion();
   const [inputText, setInputText] = useState('');
+
   const toastId = 'question-generate-toast';
 
   const handleSubmit = () => {
@@ -41,14 +42,15 @@ const Main = () => {
       onError: (error) => {
         console.error('질문 생성 실패:', error);
         Toastify({
-          type: 'error',
+          type: 'update',
+          iconType: 'error',
           message: '질문 생성에 실패했습니다.',
+          toastId: toastId,
+          render: 'error',
         });
       },
     });
   };
-
-  const selectedFileName = fileInputRef.current?.files?.[0]?.name || '';
 
   return (
     <main className={styles.container}>
@@ -64,6 +66,7 @@ const Main = () => {
             aria-label="포트폴리오 내용 입력"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
+            disabled={isFileSelected}
           />
           <section className={styles.btn_container}>
             <article className={styles.file_upload_container}>
@@ -75,7 +78,11 @@ const Main = () => {
                 onChange={handleFileChange}
               />
               {!isFileSelected && (
-                <button className={styles.pdf_btn} onClick={handleClick}>
+                <button
+                  className={styles.pdf_btn}
+                  onClick={handleClick}
+                  disabled={inputText.trim().length > 0}
+                >
                   + PDF 삽입
                 </button>
               )}
@@ -83,11 +90,7 @@ const Main = () => {
                 <div className={styles.file_info}>
                   <span className={styles.file_name}>{selectedFileName}</span>
                   <button className={styles.cancel_btn} onClick={resetFile}>
-                    <img 
-                      src={Close}
-                      alt="취소 버튼" 
-                      width={10} 
-                      height={10} />
+                    <img src={Close} alt="취소 버튼" width={10} height={10} />
                   </button>
                 </div>
               )}
@@ -95,7 +98,7 @@ const Main = () => {
             <button
               className={styles.send_btn}
               onClick={handleSubmit}
-              disabled={isPending || !inputText.trim()}
+              disabled={isPending || (!inputText.trim() && !isFileSelected)}
             >
               <img
                 src={ArrowRight}
