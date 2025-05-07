@@ -16,7 +16,7 @@ const Main = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: PostType) => {
-      const response = await postWithToken(null, '/question/generate-by-text', data);
+      const response = await postWithToken(null, '/question-sets/generate-by-text', data);
       return response;
     },
   })
@@ -47,7 +47,7 @@ const Main = () => {
         
           setTimeout(() => {
             Toastify({ type: 'dismiss', toastId });
-            navigation('/question', { state: response.data.projectQuestions });
+            navigation('/question', { state: response.data });
           }, 2000);
         },
         onError: (error) => {

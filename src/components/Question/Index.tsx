@@ -1,14 +1,14 @@
 import style from './style.module.css';
 
-interface ProjectQuestion {
+interface CommonQuestion {
     id: number;
-    projectName: string;
+    title: string;
     question: string;
     purpose: string;
 }
 
 interface QuestionProps {
-    Questions: ProjectQuestion[];
+    Questions: CommonQuestion[];
 }
 
 const QuestionList = ({ Questions }: QuestionProps) => {
