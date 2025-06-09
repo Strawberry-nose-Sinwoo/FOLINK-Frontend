@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface MessageFormProps {
   onSendMessage: (message: string) => void;
-  isSubmitting?: boolean; // 제출 중 상태 추가
+  isSubmitting?: boolean; 
 }
 
 const MessageForm = ({ onSendMessage, isSubmitting = false }: MessageFormProps) => {
@@ -12,7 +12,7 @@ const MessageForm = ({ onSendMessage, isSubmitting = false }: MessageFormProps) 
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!message.trim() || isSubmitting) return; // 빈 메시지 또는 제출 중이면 제출 방지
+    if (!message.trim() || isSubmitting) return; 
     onSendMessage(message);
     setMessage('');
   };

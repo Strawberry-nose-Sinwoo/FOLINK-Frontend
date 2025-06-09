@@ -7,9 +7,10 @@
 
 :root {
   --primary: #4340ff;
+  --primary_hover: #3936e6;
   --text: #2d2d2d;
   --button: #3d3dff;
-  --border: #f8f9fa;
+  --border: #e5e5e5;
   --shadow: #00000025;
   --gradient: rgba(67, 64, 255, 0.3);
 }
@@ -51,4 +52,8 @@ h1 {
   font-size: 20px;
   font-weight: bolder;
   text-shadow: 4px 4px 2px var(--shadow);
+}
+
+li {
+  list-style: none;
 }

@@ -19,7 +19,14 @@ const defaultToastOptions: ToastOptions = {
   transition: Slide,
 };
 
-export const Toastify = ({ message, type, iconType, position, toastId, render }: ToastProps) => {
+export const Toastify = ({
+  message,
+  type,
+  iconType,
+  position,
+  toastId,
+  render,
+}: ToastProps) => {
   const toastConfig: ToastOptions = {
     ...defaultToastOptions,
     position: position || defaultToastOptions.position,
@@ -44,9 +51,9 @@ export const Toastify = ({ message, type, iconType, position, toastId, render }:
       if (!toastId) return; // toastId 없으면 업데이트 불가
       toast.update(toastId, {
         ...toastConfig,
-        render: message, 
+        render: message,
         type: render,
-        autoClose: defaultToastOptions.autoClose, 
+        autoClose: defaultToastOptions.autoClose,
         isLoading: false,
       });
       return;

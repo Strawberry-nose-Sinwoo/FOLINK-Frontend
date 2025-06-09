@@ -1,0 +1,14 @@
+.list_box {
+    width: 500px;
+    height: 87%;
+    padding: 5px;
+    overflow: none;
+    position: relative;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    & > li {
+        margin: 20px 0 0 15px;
+    }
+}

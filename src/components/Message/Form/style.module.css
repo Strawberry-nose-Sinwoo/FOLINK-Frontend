@@ -8,7 +8,8 @@
   .message_input {
     flex-grow: 1;
     padding: 15px;
-    border-radius: 16px;
+    max-width: 100%;
+    border-radius: 8px;
     border: 1px solid #ccc;
     margin-right: 10px;
   }
@@ -16,10 +17,16 @@
   .send_button {
     padding: 15px 20px;
     border-radius: 8px;
+    max-width: 100%;
     border: none;
     background-color: var(--primary);
+    transition: all 0.15s ease-in-out;
     color: #fff;
     cursor: pointer;
+
+    &:hover {
+      background-color: var(--primary_hover);
+    }
 
     &:disabled {
       opacity: 0.6;
