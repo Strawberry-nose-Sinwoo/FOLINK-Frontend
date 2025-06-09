@@ -1,3 +1,3 @@
 export type PostType = {
-    text: string;
+    userResponse: string;
 }

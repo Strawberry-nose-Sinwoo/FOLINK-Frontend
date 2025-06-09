@@ -1,48 +1,149 @@
 import { useEffect, useState } from 'react';
-import { MessageType } from '@/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getWithToken, postWithToken } from '@/api';
+import { MessageType, PostType } from '@/types';
 
-export const useMessage = () => {
-    const [message, setMessages] = useState<MessageType[]>([]); // 메시지 상태
-    const [currentTypingId, setCurrentTypingId] = useState<null | number>(null); // 현재 타이핑 중인 메시지의 id
+const sendMessageToApi = async (conversationId: string, message: string) => {
+  const data: PostType = { userResponse: message };
+  const response = await postWithToken(
+    null,
+    `/conversations/${conversationId}/messages`,
+    data
+  );
+  return response.data;
+};
 
-    useEffect(() => {
-        if (currentTypingId === null) {
-            const nextTypingMessage = message.find(
-                (msg) => !msg.isUser && msg.isTyping
-            );
-            if (nextTypingMessage) {
-                setCurrentTypingId(nextTypingMessage.id);
-            }
-        }
-    }, [message, currentTypingId]);
+const fetchMessages = async (conversationId: string) => {
+  const response = await getWithToken(
+    null,
+    `/conversations/${conversationId}/messages`
+  );
+  return response.data.messages;
+};
 
-    const handleSendMessage = (message: string) => {
-        const MessageId = Date.now(); // 메시지의 고유한 id 생성
-        setMessages((prevMessages) => [
-            ...prevMessages,
-            { text: message, isUser: true, isTyping: false, id: MessageId },
-            {
-                text: `현재 당신이 보낸 메시지는 "${message}"입니다.`,
-                isUser: false,
-                isTyping: true, 
-                id: MessageId + 1,
-            },
-        ]);
-    };
+export const useMessage = (conversationId: string) => {
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [currentTypingId, setCurrentTypingId] = useState<null | number>(null);
 
-    const handleEndTyping = (id: number) => {
-        setMessages((prevMessages) =>
-            prevMessages.map((msg) =>
-                msg.id === id ? { ...msg, isTyping: false } : msg
-            )
-        );
-        setCurrentTypingId(null); // 타이핑 종료 후 id 초기화
+  console.log(messages)
+
+  const {
+    data: serverMessages,
+    isLoading: messagesLoading,
+    error: messagesError,
+  } = useQuery({
+    queryKey: ['messages', conversationId],
+    queryFn: () => fetchMessages(conversationId),
+    enabled: conversationId !== 'default',
+    refetchInterval: 5000,
+  });
+
+  useEffect(() => {
+    if (serverMessages && Array.isArray(serverMessages)) {
+      setMessages(
+        serverMessages.map((msg: any) => ({
+          id: msg.id,
+          userResponse: msg.content,
+          isUser: msg.type === 'user',
+          isTyping: false,
+          evaluatorFeedback: msg.evaluatorFeedback || null,
+          createdAt: msg.created_at,
+        }))
+      );
     }
-    
-    return {
-        message,
-        currentTypingId,
-        handleSendMessage,
-        handleEndTyping,
-    };
+  }, [serverMessages]);
+
+  useEffect(() => {
+    if (currentTypingId === null) {
+      const nextTypingMessage = messages.find(
+        msg => !msg.isUser && msg.isTyping
+      );
+      if (nextTypingMessage) {
+        setCurrentTypingId(nextTypingMessage.id);
+        setTimeout(() => {
+          handleEndTyping(nextTypingMessage.id);
+        }, 2000);
+      }
+    }
+  }, [messages, currentTypingId]);
+
+  const sendMessageMutation = useMutation({
+    mutationFn: (message: string) => sendMessageToApi(conversationId, message),
+    onMutate: message => {
+      const messageId = Date.now();
+      setMessages(prev => [
+        ...prev,
+        {
+          id: messageId,
+          userResponse: message,
+          isUser: true,
+          isTyping: false,
+          evaluatorFeedback: null,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: messageId + 1,
+          userResponse: '답변을 준비 중입니다..',
+          isUser: false,
+          isTyping: true,
+          evaluatorFeedback: null,
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+      setCurrentTypingId(messageId + 1);
+      return { messageId };
+    },
+    onSuccess: response => {
+      const aiMessage = response.messages.find((msg: any) => msg.type === 'ai');
+      if (aiMessage) {
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === currentTypingId
+              ? {
+                  id: aiMessage.id,
+                  userResponse: aiMessage.content,
+                  isUser: false,
+                  isTyping: true,
+                  evaluatorFeedback: aiMessage.evaluatorFeedback || null,
+                  createdAt: aiMessage.created_at,
+                }
+              : msg
+          )
+        );
+      }
+    },
+    onError: error => {
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === currentTypingId
+            ? { ...msg, userResponse: `${error}`, isTyping: false }
+            : msg
+        )
+      );
+      setCurrentTypingId(null);
+    },
+  });
+
+  const handleSendMessage = (message: string) => {
+    if (message.trim() && !sendMessageMutation.isPending) {
+      sendMessageMutation.mutate(message);
+    }
+  };
+
+  const handleEndTyping = (id: number) => {
+    setMessages(prev =>
+      prev.map(msg => (msg.id === id ? { ...msg, isTyping: false } : msg))
+    );
+    setCurrentTypingId(null);
+  };
+
+  return {
+    messages,
+    currentTypingId,
+    handleSendMessage,
+    handleEndTyping,
+    messagesLoading,
+    messagesError,
+    isSubmitting: sendMessageMutation.isPending,
+  };
 };

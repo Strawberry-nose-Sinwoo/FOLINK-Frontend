@@ -1,6 +1,7 @@
 import styles from './style.module.css';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Toastify } from '@/allFiles';
 import { ArrowRight, Close } from '@/assets';
 import { useFileUpload } from '@/hooks';
@@ -12,6 +13,7 @@ const Main = () => {
   const { mutate, isPending } = useGenerateQuestion();
   const [inputText, setInputText] = useState('');
 
+  const navigation = useNavigate();
   const toastId = 'question-generate-toast';
 
   const handleSubmit = () => {
@@ -27,7 +29,7 @@ const Main = () => {
       toastId: toastId,
     });
 
-    const data: PostType = { text: inputText };
+    const data: PostType = { userResponse: inputText };
     mutate(data, {
       onSuccess: (response) => {
         console.log('질문 추출 결과:', response);
@@ -38,6 +40,11 @@ const Main = () => {
           toastId: toastId,
           render: 'success',
         });
+
+        setTimeout(() => {
+          Toastify({ type: 'dismiss', toastId });
+          navigation(`/question/${response.data.questionSet.id}`);
+        }, 2000);
       },
       onError: (error) => {
         console.error('질문 생성 실패:', error);
@@ -65,15 +72,15 @@ const Main = () => {
             placeholder="포트폴리오 내용을 입력하세요."
             aria-label="포트폴리오 내용 입력"
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            disabled={isFileSelected}
+            onChange={e => setInputText(e.target.value)}
+            disabled={isFileSelected || isPending}
           />
           <section className={styles.btn_container}>
             <article className={styles.file_upload_container}>
               <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 accept="application/pdf"
                 onChange={handleFileChange}
               />
