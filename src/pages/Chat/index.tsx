@@ -121,7 +121,7 @@ const Chat = () => {
             )}
           </div>
           {messagesLoading ? (
-            <div className={styles.loading}>메시지 로드 중...</div>
+            <components.Loading />
           ) : (
             <components.MessageList
               messages={messages}

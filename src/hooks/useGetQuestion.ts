@@ -35,7 +35,6 @@ export const useGetQuestion = (questionSetId: string | undefined) => {
         null,
         `/question-sets/${questionSetId}`
       );
-      console.log(response); 
       return response;
     },
     enabled: !!questionSetId, 

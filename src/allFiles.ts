@@ -2,9 +2,10 @@ import Main from "./pages/Main";
 import Chat from "./pages/Chat";
 import Question from "./pages/Question";
 import { Toastify } from "./components/Toastify";
-import MessageForm from "./components/Message/Form";
+import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
+import Loading from "./components/Loading";
 
 export {
   Main,
@@ -14,4 +15,5 @@ export {
   MessageForm,
   MessageList,
   QuestionList,
+  Loading
 };

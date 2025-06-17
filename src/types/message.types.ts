@@ -4,5 +4,5 @@ export type MessageType = {
   isUser: boolean;
   isTyping?: boolean;
   evaluatorFeedback?: string | null;
-  createdAt?: string; 
+  createdAt?: string;
 };
