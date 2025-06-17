@@ -6,7 +6,8 @@ import { ArrowLeft } from '@/assets';
 import { CommonQuestionType } from '@/types';
 import { Toastify } from '@/allFiles';
 import { useGetQuestion } from '@/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Button } from "@/components/ui/button"
 
 interface GroupedQuestions {
   [key: string]: CommonQuestionType[];
@@ -16,6 +17,10 @@ const Question = () => {
   const { questionId } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
   const { data: response, isLoading, error } = useGetQuestion(questionId);
+  const [isLoadingState, setIsLoadingState] = useState(true);
+  const [loadingStatus, setLoadingStatus] = useState<'loading' | 'success'>(
+    'loading'
+  );
 
   const groupedQuestions: GroupedQuestions | undefined = response?.data?.id
     ? (() => {
@@ -43,25 +48,35 @@ const Question = () => {
     : undefined;
 
   useEffect(() => {
-    if (error) {
+    if (isLoading) {
+      setIsLoadingState(true);
+      setLoadingStatus('loading');
+    } else if (error) {
+      setIsLoadingState(false);
       Toastify({
         type: 'error',
         message: '질문 세트를 불러오는데 실패했습니다.',
         toastId: 'fetch-questions-error',
       });
-      setTimeout(() => navigate(-1), 2000);
-    } else if (!groupedQuestions && !isLoading) {
+      setTimeout(() => navigate(-1), 1500);
+    } else if (!groupedQuestions) {
+      setIsLoadingState(false);
       Toastify({
         type: 'error',
         message: '질문 데이터가 없습니다.',
         toastId: 'no-questions',
       });
-      setTimeout(() => navigate(-1), 2000);
+      setTimeout(() => navigate(-1), 1500);
+    } else {
+      setLoadingStatus('success');
+      setTimeout(() => {
+        setIsLoadingState(false); 
+      }, 1000); 
     }
-  }, [error, groupedQuestions, isLoading, navigate]);
+  }, [isLoading, error, groupedQuestions, navigate]);
 
-  if (isLoading) {
-    return <div>로딩 중...</div>;
+  if (isLoadingState) {
+    return <components.Loading status={loadingStatus} />;
   }
 
   if (!groupedQuestions) {
@@ -83,18 +98,18 @@ const Question = () => {
         {Object.entries(groupedQuestions).map(([title, questions]) => (
           <div className={style.list_container_2} key={title}>
             <div className={style.title_box}>
-              <h2>{title}</h2>
+              <h2 className={style.title}>{title}</h2>
             </div>
             <components.QuestionList Questions={questions} />
           </div>
         ))}
       </div>
-      <button
+      <Button 
         onClick={() => navigate('/chat', { state: groupedQuestions })}
-        className={style.answer_button}
+        variant={'outline'}
       >
         답변 하기
-      </button>
+      </Button>
     </div>
   );
 };

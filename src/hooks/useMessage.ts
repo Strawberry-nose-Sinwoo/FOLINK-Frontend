@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getWithToken, postWithToken } from '@/api';
 import { MessageType, PostType } from '@/types';
 
-const sendMessageToApi = async (conversationId: string, message: string) => {
+const sendMessage = async (conversationId: string, message: string) => {
   const data: PostType = { userResponse: message };
   const response = await postWithToken(
     null,
@@ -68,7 +68,7 @@ export const useMessage = (conversationId: string) => {
   }, [messages, currentTypingId]);
 
   const sendMessageMutation = useMutation({
-    mutationFn: (message: string) => sendMessageToApi(conversationId, message),
+    mutationFn: (message: string) => sendMessage(conversationId, message),
     onMutate: message => {
       const messageId = Date.now();
       setMessages(prev => [
