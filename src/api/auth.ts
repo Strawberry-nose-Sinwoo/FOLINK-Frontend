@@ -1,10 +1,10 @@
-import { PostType } from "@/types";
+import { PostType, signInType, signUpType } from "@/types";
 import { CommonAPI } from "./common";
 
 export const postWithToken = async (
   accessToken: string | null,
   url: string,
-  data: PostType
+  data: PostType | signInType | signUpType
 ): Promise<any> => {
   try {
     const response = await CommonAPI.post(url, data, {
