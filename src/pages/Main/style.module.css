@@ -51,8 +51,10 @@
   border: none;
   border-radius: 0.4375rem;
   box-shadow: 0.03125rem 0.03125rem 0.25rem var(--shadow);
+  transition: opacity ease-in 0.15s;
 
   &:disabled {
+    opacity: 0.5;
     cursor: not-allowed;      
   }
 }
