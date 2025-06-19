@@ -4,7 +4,7 @@ import { CommonAPI } from "./common";
 export const postWithToken = async (
   accessToken: string | null,
   url: string,
-  data: PostType | signInType | signUpType
+  data: PostType | signInType | signUpType | FormData
 ): Promise<any> => {
   try {
     const response = await CommonAPI.post(url, data, {
