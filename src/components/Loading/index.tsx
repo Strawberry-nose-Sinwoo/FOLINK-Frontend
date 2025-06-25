@@ -6,7 +6,12 @@ interface LoadingType {
   status?: string | 'loading' | 'success'
 }
 const Loading = ({ status }: LoadingType) => {
+  const [fadeIn, setFadeIn] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
 
   useEffect(() => {
     if(status === 'success') {
@@ -18,7 +23,11 @@ const Loading = ({ status }: LoadingType) => {
   }, [status]);
 
   return (
-    <div className={`${styles.overlay} ${fadeOut ? styles.fadeOut : ''}`}>
+    <div
+      className={`${styles.overlay} ${fadeIn ? styles.fadeIn : ''} ${
+        fadeOut ? styles.fadeOut : ''
+      }`}
+    >
       <div className={styles.loading} />
     </div>
   );
