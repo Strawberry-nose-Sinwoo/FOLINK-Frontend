@@ -12,17 +12,21 @@
   z-index: 9999;
 }
 
+.fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
 .overlay.fadeOut {
-  animation: fadeOut 0.5s ease-out forwards;
+  animation: fadeOut 0.1s ease-out forwards;
 }
 
 .loading {
-  width: 65px;
+  width: 85px;
   aspect-ratio: 1;
   --g: radial-gradient(farthest-side, #0000 calc(95% - 3px), var(--primary, #000) calc(100% - 3px) 98%, #0000 101%) no-repeat;
   background: var(--g), var(--g), var(--g);
-  background-size: 30px 30px;
-  animation: l10 1.5s infinite;
+  background-size: 40px 40px;
+  animation: l10 1.8s infinite;
 }
 
 @keyframes l10 {
@@ -40,6 +44,15 @@
   }
   100% {
     background-position: 100% 100%, 0 0, 0 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
