@@ -1,0 +1,36 @@
+.message_form {
+    border-top: 1px solid #f0f0f0;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .message_input {
+    flex-grow: 1;
+    padding: 15px;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+  }
+  
+  .send_button {
+    padding: 15px 20px;
+    border-radius: 8px;
+    max-width: 100%;
+    border: none;
+    background-color: var(--primary);
+    transition: all 0.15s ease-in-out;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--primary_hover);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;      
+    }
+  }
