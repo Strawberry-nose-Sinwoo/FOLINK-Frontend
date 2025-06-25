@@ -1,18 +1,20 @@
 import styles from './style.module.css';
 
 import { useState } from 'react';
+import { ArrowUpBlue } from '@/assets';
 
 interface MessageFormProps {
   onSendMessage: (message: string) => void;
   isSubmitting?: boolean; 
+  isAiTyping?: boolean;
 }
 
-const MessageForm = ({ onSendMessage, isSubmitting = false }: MessageFormProps) => {
+const MessageForm = ({ onSendMessage, isSubmitting = false, isAiTyping = false }: MessageFormProps) => {
   const [message, setMessage] = useState<string>('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!message.trim() || isSubmitting) return; 
+    if (!message.trim() || isSubmitting || isAiTyping) return; 
     onSendMessage(message);
     setMessage('');
   };
@@ -26,15 +28,15 @@ const MessageForm = ({ onSendMessage, isSubmitting = false }: MessageFormProps) 
         onChange={(e) => setMessage(e.target.value)}
         placeholder="면접 질문에 대한 답을 입력하세요."
         aria-label="메시지 입력"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isAiTyping}
       />
       <button
         className={styles.send_button}
         type="submit"
         aria-label="메시지 전송"
-        disabled={isSubmitting || !message.trim()}
+        disabled={isSubmitting || isAiTyping || !message.trim()}
       >
-        답변 하기
+        <img src={ArrowUpBlue} alt="윗화살"/>
       </button>
     </form>
   );

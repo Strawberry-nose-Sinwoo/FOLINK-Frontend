@@ -1,4 +1,4 @@
-import * as components from '@/allFiles'
+import * as components from '@/allFiles';
 import styles from './style.module.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ const Main = () => {
     fileInputRef,
     isDragging,
     isUploading,
+    progress,
     handleClick,
     handleFileChange,
     handleDragEnter,
@@ -26,7 +27,7 @@ const Main = () => {
 
   return (
     <main className={styles.container}>
-      {isUploading && <components.Loading status="loading" />}
+      {isUploading && <components.QuestionLoading status={isUploading ? 'loading' : 'success'} progress={progress} />}
       <section className={styles.main}>
         <header className={styles.title_container}>
           <h1>

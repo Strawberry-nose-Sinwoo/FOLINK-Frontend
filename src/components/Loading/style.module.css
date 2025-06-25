@@ -12,7 +12,7 @@
   z-index: 9999;
 }
 
-.fadeIn {
+.fadeIn ORF {
   animation: fadeIn 0.3s ease forwards;
 }
 
@@ -23,10 +23,46 @@
 .loading {
   width: 85px;
   aspect-ratio: 1;
-  --g: radial-gradient(farthest-side, #0000 calc(95% - 3px), var(--primary, #000) calc(100% - 3px) 98%, #0000 101%) no-repeat;
+  --g: radial-gradient(farthest-side, #0000 calc(95% - 3px), #9333EA calc(100% - 3px) 98%, #0000 101%) no-repeat;
   background: var(--g), var(--g), var(--g);
   background-size: 40px 40px;
   animation: l10 1.8s infinite;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; 
+}
+
+.progressContainer {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #9333EA, #4F46E5);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); 
+  opacity: 0; 
+}
+
+.textFadeIn {
+  animation: textFadeIn 0.3s ease forwards; 
 }
 
 @keyframes l10 {
@@ -62,5 +98,16 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

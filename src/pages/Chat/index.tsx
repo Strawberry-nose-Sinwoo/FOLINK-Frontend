@@ -121,7 +121,7 @@ const Chat = () => {
             )}
           </div>
           {messagesLoading ? (
-            <components.Loading />
+            <components.PageLoading />
           ) : (
             <components.MessageList
               messages={messages}
@@ -129,7 +129,9 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-          <components.MessageForm onSendMessage={handleSendMessage} />
+          <div className={styles.message_form_container}>
+            <components.MessageForm onSendMessage={handleSendMessage} />
+          </div>
         </div>
       </section>
     </main>

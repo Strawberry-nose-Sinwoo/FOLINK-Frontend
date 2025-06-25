@@ -76,7 +76,7 @@ const Question = () => {
   }, [isLoading, error, groupedQuestions, navigate]);
 
   if (isLoadingState) {
-    return <components.Loading status={loadingStatus} />;
+    return <components.PageLoading status={loadingStatus} />;
   }
 
   if (!groupedQuestions) {
@@ -103,7 +103,7 @@ const Question = () => {
         onClick={() => navigate(-1)}
       />
       <h1 className={style.main_text}>
-        포트폴리오 기반으로 질문을 만들어 봤어요.
+        <span>면접을</span> 시작해볼까요?
       </h1>
       <div className={style.questions_wrapper}>
         <div className={style.list_container}>
@@ -111,17 +111,19 @@ const Question = () => {
             <GoProject />
             프로젝트 질문
           </h2>
-          <div className={style.list_container_2}>
-            {Object.entries(groupedQuestions.projectQuestions).map(
-              ([title, questions]) => (
-                <div className={style.list_container_3} key={title}>
-                  <div className={style.title_box}>
-                    <h3 className={style.title}>{title}</h3>
+          <div className={style.list_container_1}>
+            <div className={style.list_container_2}>
+              {Object.entries(groupedQuestions.projectQuestions).map(
+                ([title, questions]) => (
+                  <div className={style.list_container_3} key={title}>
+                    <div className={style.title_box}>
+                      <h3 className={style.title}>{title}</h3>
+                    </div>
+                    <components.QuestionList Questions={questions} />
                   </div>
-                  <components.QuestionList Questions={questions} />
-                </div>
-              )
-            )}
+                )
+              )}
+            </div>
           </div>
         </div>
         <div className={style.list_container}>
@@ -129,26 +131,28 @@ const Question = () => {
             <PiFileCode />
             기술 스택 질문
           </h2>
-          <div className={style.list_container_2}>
-            {Object.entries(groupedQuestions.techStackQuestions).map(
-              ([title, questions]) => (
-                <div className={style.list_container_3} key={title}>
-                  <div className={style.title_box}>
-                    <h3 className={style.title}>{title}</h3>
+          <div className={style.list_container_1}>
+            <div className={style.list_container_2}>
+              {Object.entries(groupedQuestions.techStackQuestions).map(
+                ([title, questions]) => (
+                  <div className={style.list_container_3} key={title}>
+                    <div className={style.title_box}>
+                      <h3 className={style.title}>{title}</h3>
+                    </div>
+                    <components.QuestionList Questions={questions} />
                   </div>
-                  <components.QuestionList Questions={questions} />
-                </div>
-              )
-            )}
+                )
+              )}
+            </div>
           </div>
         </div>
       </div>
-        <button
-          className={style.answer_button}
-          onClick={() => navigate('/chat', { state: flattenedQuestions })}
-        >
-          답변 하기
-        </button>
+      <button
+        className={style.answer_button}
+        onClick={() => navigate('/chat', { state: flattenedQuestions })}
+      >
+        답변 하기
+      </button>
     </div>
   );
 };
