@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useFileUpload } from '@/hooks';
 import { PdfUploadTypes } from '@/types';
 import { Upload } from '@/assets';
+import { useEffect } from 'react';
 
 const Main = () => {
   const navigation = useNavigate();
+  const historyQuestionId = localStorage.getItem('question_history');
   const {
     fileInputRef,
     isDragging,
@@ -25,9 +27,14 @@ const Main = () => {
     },
   });
 
+  useEffect(() => {
+    historyQuestionId;
+  }, [historyQuestionId]);
+
   return (
     <main className={styles.container}>
       {isUploading && <components.QuestionLoading status={isUploading ? 'loading' : 'success'} progress={progress} />}
+      {historyQuestionId !== null && <components.LastQuestioonModal />}
       <section className={styles.main}>
         <header className={styles.title_container}>
           <h1>

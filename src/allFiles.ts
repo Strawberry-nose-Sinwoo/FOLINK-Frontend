@@ -6,6 +6,7 @@ import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
 import { PageLoading, QuestionLoading } from "./components/Loading";
+import { LastQuestioonModal } from "./components/Modal";
 
 export {
   Main,
@@ -17,4 +18,5 @@ export {
   QuestionList,
   PageLoading,
   QuestionLoading,
+  LastQuestioonModal,
 };

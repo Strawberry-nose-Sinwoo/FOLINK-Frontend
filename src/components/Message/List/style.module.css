@@ -13,7 +13,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  scrollbar-color: #bcbcbc #fff;
+  scrollbar-color: #cdcdcd #fff;
 }
 
 .message_container {
@@ -28,7 +28,7 @@
   margin-bottom: 20px;
   max-width: 80%;
   background: #fff;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+  border: #eeeeee 2px solid;
   padding: 10px 15px;
   display: flex;
   flex-direction: column;
@@ -40,6 +40,7 @@
   background: var(--primary);
   color: #fff;
   border-radius: 16px 16px 0 16px;
+  border: var(--primary) 2px solid;
 }
 
 .ai_message {

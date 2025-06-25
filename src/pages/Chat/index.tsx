@@ -67,6 +67,23 @@ const Chat = () => {
     }
   }, [groupedQuestions]);
 
+  const handleNextQuestion = () => {
+    const allQuestions = getAllQuestions();
+    if (!selectedConversationId || !allQuestions.length) return;
+
+    const currentIndex = allQuestions.findIndex(
+      q => q.conversationId === selectedConversationId
+    );
+    const nextIndex = currentIndex + 1;
+
+    if (nextIndex < allQuestions.length) {
+      setSelectedConversationId(allQuestions[nextIndex].conversationId);
+    } else {
+      //마지막 질문 알림 표시,처음으로
+      setSelectedConversationId(allQuestions[0].conversationId); // 첫 번째 질문으로 순환
+    }
+  };
+
   return (
     <main className={styles.container}>
       <nav className={styles.nav}>
@@ -129,8 +146,13 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
+          {messages.length > 9 ? (
+            <button className={styles.nextButton} onClick={handleNextQuestion}>다음 질문 넘어가기</button>
+          ) : (
+            ''
+          )}
           <div className={styles.message_form_container}>
-            <components.MessageForm onSendMessage={handleSendMessage} />
+            <components.MessageForm onSendMessage={handleSendMessage} messagesLength={messages.length} />
           </div>
         </div>
       </section>

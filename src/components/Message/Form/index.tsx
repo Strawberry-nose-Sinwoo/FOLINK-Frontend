@@ -7,9 +7,10 @@ interface MessageFormProps {
   onSendMessage: (message: string) => void;
   isSubmitting?: boolean; 
   isAiTyping?: boolean;
+  messagesLength: number; 
 }
 
-const MessageForm = ({ onSendMessage, isSubmitting = false, isAiTyping = false }: MessageFormProps) => {
+const MessageForm = ({ onSendMessage, isSubmitting = false, isAiTyping = false, messagesLength }: MessageFormProps) => {
   const [message, setMessage] = useState<string>('');
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -28,7 +29,7 @@ const MessageForm = ({ onSendMessage, isSubmitting = false, isAiTyping = false }
         onChange={(e) => setMessage(e.target.value)}
         placeholder="면접 질문에 대한 답을 입력하세요."
         aria-label="메시지 입력"
-        disabled={isSubmitting || isAiTyping}
+        disabled={isSubmitting || isAiTyping || messagesLength >= 9 ? true : false} // Disable input if submitting, AI is typing, or no messages
       />
       <button
         className={styles.send_button}
