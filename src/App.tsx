@@ -9,6 +9,7 @@ function App() {
         <Route path={'/'} element={<route.Main />} />
         <Route path={'/chat'} element={<route.Chat />} />
         <Route path={'/question/:questionId'} element={<route.Question />} />
+        <Route path={'/demo'} element={<route.Demo/>} />
       </Routes>
     </Router>
   );

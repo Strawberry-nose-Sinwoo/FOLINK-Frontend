@@ -1,10 +1,13 @@
-import styles from './style.module.css';
+import { useNavigate } from 'react-router-dom'
+import styles from './style.module.css'
+import { useEffect, useState } from 'react'
 
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+interface propsTypes {
+  chatId: number
+}
 
-export const LastQuestioonModal = () => {
- const id = localStorage.getItem("question_history")
+export default function LastQuestioonModal() {
+  const id = localStorage.getItem("question_history")
   const [history, setHistory] = useState<boolean>(false)
   const navigate = useNavigate()
 

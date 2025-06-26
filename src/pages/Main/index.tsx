@@ -1,4 +1,4 @@
-import * as components from '@/allFiles';
+import * as components from '@/allFiles'
 import styles from './style.module.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -9,12 +9,11 @@ import { useEffect } from 'react';
 
 const Main = () => {
   const navigation = useNavigate();
-  const historyQuestionId = localStorage.getItem('question_history');
+  const historyQuesitonId = localStorage.getItem("question_history")
   const {
     fileInputRef,
     isDragging,
     isUploading,
-    progress,
     handleClick,
     handleFileChange,
     handleDragEnter,
@@ -28,13 +27,15 @@ const Main = () => {
   });
 
   useEffect(() => {
-    historyQuestionId;
-  }, [historyQuestionId]);
+    historyQuesitonId
+  },[historyQuesitonId])
 
   return (
     <main className={styles.container}>
-      {isUploading && <components.QuestionLoading status={isUploading ? 'loading' : 'success'} progress={progress} />}
-      {historyQuestionId !== null && <components.LastQuestioonModal />}
+      {isUploading && <components.Loading status="loading" />}
+      {
+        historyQuesitonId !== null && <components.LastQuestioonModal/>
+      }
       <section className={styles.main}>
         <header className={styles.title_container}>
           <h1>

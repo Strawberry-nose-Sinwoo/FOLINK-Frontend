@@ -1,12 +1,13 @@
 import Main from "./pages/Main";
 import Chat from "./pages/Chat";
+import Demo from './pages/demo'
 import Question from "./pages/Question";
 import { Toastify } from "./components/Toastify";
 import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
 import { PageLoading, QuestionLoading } from "./components/Loading";
-import { LastQuestioonModal } from "./components/Modal";
+import LastQuestioonModal from "./components/LastQuestioonModal";
 
 export {
   Main,
@@ -19,4 +20,5 @@ export {
   PageLoading,
   QuestionLoading,
   LastQuestioonModal,
+  Demo
 };
