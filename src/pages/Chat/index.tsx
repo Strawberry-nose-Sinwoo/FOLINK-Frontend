@@ -9,29 +9,24 @@ import { useEffect, useState } from 'react';
 
 const Chat = () => {
   const { state: groupedQuestions } = useLocation();
-  const [selectedConversationId, setSelectedConversationId] = useState<
-    number | null
-  >(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
   const {
     messages,
     currentTypingId,
     handleSendMessage,
     handleEndTyping,
     messagesLoading,
-  } = useMessage(
-    selectedConversationId ? String(selectedConversationId) : 'default'
-  );
+  } = useMessage(selectedConversationId ? String(selectedConversationId) : 'default');
 
   const getAllQuestions = (): CommonQuestionType[] => {
     if (!groupedQuestions) {
       return [];
     }
-    const questions = Object.entries(groupedQuestions).flatMap(
-      ([groupName, questionList]) =>
-        (questionList as CommonQuestionType[]).map(q => ({
-          ...q,
-          title: groupName,
-        }))
+    const questions = Object.entries(groupedQuestions).flatMap(([groupName, questionList]) =>
+      (questionList as CommonQuestionType[]).map(q => ({
+        ...q,
+        title: groupName,
+      }))
     );
     return questions;
   };
@@ -39,9 +34,7 @@ const Chat = () => {
   const renderQuestion = (question: CommonQuestionType): string => {
     try {
       const questionText = question.question;
-      return questionText.length >= 15
-        ? `${questionText.slice(0, 15)}...`
-        : questionText;
+      return questionText.length >= 15 ? `${questionText.slice(0, 15)}...` : questionText;
     } catch (error) {
       return '유효하지 않은 질문';
     }
@@ -50,14 +43,28 @@ const Chat = () => {
   const findSelectedQuestion = (): CommonQuestionType | null => {
     if (!selectedConversationId) return null;
     const allQuestions = getAllQuestions();
-    const selected =
-      allQuestions.find(q => q.conversationId === selectedConversationId) ||
-      null;
-    return selected;
+    return allQuestions.find(q => q.conversationId === selectedConversationId) || null;
   };
 
   const handleQuestionClick = (conversationId: number) => {
     setSelectedConversationId(conversationId);
+  };
+
+  const handleNextQuestion = () => {
+    const allQuestions = getAllQuestions();
+    if (!selectedConversationId || !allQuestions.length) return;
+
+    const currentIndex = allQuestions.findIndex(
+      q => q.conversationId === selectedConversationId
+    );
+    const nextIndex = currentIndex + 1;
+
+    if (nextIndex < allQuestions.length) {
+      setSelectedConversationId(allQuestions[nextIndex].conversationId);
+    } else {
+      //마지막 질문 알림 표시,처음으로
+      setSelectedConversationId(allQuestions[0].conversationId); // 첫 번째 질문으로 순환
+    }
   };
 
   useEffect(() => {
@@ -86,13 +93,9 @@ const Chat = () => {
                       <li
                         key={`${groupName}-question-${question.id}`}
                         className={`${styles.question} ${
-                          selectedConversationId === question.conversationId
-                            ? styles.active
-                            : ''
+                          selectedConversationId === question.conversationId ? styles.active : ''
                         }`}
-                        onClick={() =>
-                          handleQuestionClick(question.conversationId)
-                        }
+                        onClick={() => handleQuestionClick(question.conversationId)}
                       >
                         {renderQuestion(question)}
                       </li>
@@ -113,8 +116,7 @@ const Chat = () => {
           <div className={styles.chatHeader}>
             {selectedConversationId && findSelectedQuestion() ? (
               <h2 className={styles.chatTitle}>
-                {findSelectedQuestion()?.title}:{' '}
-                {findSelectedQuestion()?.question}
+                {findSelectedQuestion()?.title}: {findSelectedQuestion()?.question}
               </h2>
             ) : (
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
@@ -129,7 +131,14 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-          <components.MessageForm onSendMessage={handleSendMessage} />
+          {messages.length > 9 ? (
+            <button className={styles.nextButton} onClick={handleNextQuestion}>
+              다음 질문 넘어가기
+            </button>
+          ) : (
+            ''
+          )}
+          <components.MessageForm onSendMessage={handleSendMessage} messagesLength={messages.length} />
         </div>
       </section>
     </main>

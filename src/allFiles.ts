@@ -6,6 +6,7 @@ import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
 import Loading from "./components/Loading";
+import Demo from './pages/demo/index'
 
 export {
   Main,
@@ -15,5 +16,6 @@ export {
   MessageForm,
   MessageList,
   QuestionList,
-  Loading
+  Loading,
+  Demo
 };

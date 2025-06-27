@@ -1,0 +1,74 @@
+.container {
+  position: absolute;
+  width: 370px;
+  height: 100px;
+  box-shadow: 2px 2px 4px 1px rgba(173, 173, 173, 0.401);
+  border-radius: 7px;
+  display: flex;
+  top: 2%;
+  right: -50%;
+  animation: open 1s forwards;
+}
+
+.closeContainer {
+  position: absolute;
+  width: 370px;
+  height: 100px;
+  box-shadow: 2px 2px 4px 1px rgba(173, 173, 173, 0.401);
+  border-radius: 7px;
+  display: flex;
+  top: 2%;
+  right: 1.3%;
+  animation: close 1s forwards;
+}
+
+.text {
+  font-size: 17px;
+  padding: 8px;
+}
+
+.selectContainer {
+  display: flex;
+  flex-flow: column;
+}
+
+.selectContainer > button:nth-child(1) {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  top: 5px;
+  right: -90px;
+  background-color: transparent;
+  box-shadow: 1px 1px 4px 1px rgba(128, 128, 128, 0.319);
+  border: none;
+  border-radius: 80px;
+}
+
+.selectContainer > button:nth-child(2) {
+  width: 85px;
+  height: 30px;
+  position: relative;
+  bottom: -35px;
+  right: -40px;
+  border-radius: 15px;
+  border: none;
+  box-shadow: 1px 1px 4px 1px rgba(128, 128, 128, 0.319);
+}
+
+@keyframes open {
+  0% {
+    right: -50%;
+  }
+  100% {
+    right: 1.3%;
+  }
+}
+
+@keyframes close {
+  0% {
+    right: 1.3%;
+  }
+  100% {
+    right: -50%;
+  }
+}

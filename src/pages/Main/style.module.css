@@ -21,7 +21,7 @@
   }
 
   & h1 span {
-    color: #9333EA;
+    color: #9333ea;
   }
 }
 
@@ -53,8 +53,8 @@
 }
 
 .chat_container.dragging {
-  background-color: #EEEAFF;
-  border: 2px dashed #9333EA;
+  background-color: #eeeaff;
+  border: 2px dashed #9333ea;
 }
 
 .chat_container.uploading {
@@ -90,13 +90,13 @@
 
 .btn_introduce_container {
   padding: 5px 15px;
-  background-color: #C4B5FF7D;
+  background-color: #c4b5ff7d;
   border-radius: 50px;
   font-size: 12px;
   font-weight: bold;
 
   & span {
-    background: linear-gradient(90deg, #9333EA, #4F46E5);
+    background: linear-gradient(90deg, #9333ea, #4f46e5);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -116,8 +116,8 @@
   border: none;
   font-size: 1rem;
   font-weight: bold;
-  color: white; 
-  background: linear-gradient(90deg, #9333EA, #4F46E5);
+  color: white;
+  background: linear-gradient(90deg, #9333ea, #4f46e5);
   margin-top: 0px;
 }
 
@@ -152,3 +152,29 @@
   align-items: center;
   justify-content: center;
 } */
+
+.demoButtonContainer {
+  width: 49rem;
+  display: flex;
+  justify-content: center;
+}
+
+.demoButton {
+  padding: 9px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.108);
+  background-color: white;
+  margin: 0 20px;
+  font-weight: 500;
+  background: linear-gradient(90deg, #A75EFF, #342AE8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  transition: 0.3s all;
+}
+
+.demoButton:hover {
+  transform: scale(1.05);
+}

@@ -35,6 +35,7 @@ export const useGetQuestion = (questionSetId: string | undefined) => {
         null,
         `/question-sets/${questionSetId}`
       );
+      localStorage.setItem('question_history', questionSetId)
       return response;
     },
     enabled: !!questionSetId, 

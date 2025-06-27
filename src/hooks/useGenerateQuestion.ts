@@ -10,6 +10,7 @@ export const useGenerateQuestion = () => {
         '/question-sets/generate-by-text',
         data
       );
+      console.log(response)
       return response;
     },
   });

@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useFileUpload } from '@/hooks';
 import { PdfUploadTypes } from '@/types';
 import { Upload } from '@/assets';
+import LastQuestioonModal from '@/components/LastQuestionModal/Index';
+import { useEffect } from 'react';
 
 const Main = () => {
   const navigation = useNavigate();
+  const historyQuesitonId = localStorage.getItem("question_history")
   const {
     fileInputRef,
     isDragging,
@@ -24,9 +27,16 @@ const Main = () => {
     },
   });
 
+  useEffect(() => {
+    historyQuesitonId
+  }, [historyQuesitonId])
+
   return (
     <main className={styles.container}>
       {isUploading && <components.Loading status="loading" />}
+      {
+        historyQuesitonId !== null && <LastQuestioonModal />
+      }
       <section className={styles.main}>
         <header className={styles.title_container}>
           <h1>
@@ -34,9 +44,8 @@ const Main = () => {
           </h1>
         </header>
         <section
-          className={`${styles.chat_container} ${
-            isDragging ? styles.dragging : ''
-          } ${isUploading ? styles.uploading : ''}`}
+          className={`${styles.chat_container} ${isDragging ? styles.dragging : ''
+            } ${isUploading ? styles.uploading : ''}`}
           onDragEnter={handleDragEnter}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -69,6 +78,11 @@ const Main = () => {
             </button>
           </section>
         </section>
+        <div className={styles.demoButtonContainer}>
+          <button className={styles.demoButton} onClick={() => navigation('/demo/all')}>전체 면접 연습</button>
+          <button className={styles.demoButton} onClick={() => navigation('/demo/frontend')}>프론트엔드 면접 연습</button>
+          <button className={styles.demoButton} onClick={() => navigation('/demo/backend')}>백엔드 면접 연습</button>
+        </div>
       </section>
     </main>
   );
