@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFileUpload } from '@/hooks';
 import { PdfUploadTypes } from '@/types';
 import { Upload } from '@/assets';
-import LastQuestioonModal from '@/components/LastQuestionModal/Index';
+import LastQuestioonModal from '../../components/LastQuestionModal/Index';
 import { useEffect } from 'react';
 
 const Main = () => {
@@ -33,7 +33,7 @@ const Main = () => {
 
   return (
     <main className={styles.container}>
-      {isUploading && <components.Loading status="loading" />}
+      {isUploading && <components.PageLoading status="loading" />}
       {
         historyQuesitonId !== null && <LastQuestioonModal />
       }
@@ -79,9 +79,24 @@ const Main = () => {
           </section>
         </section>
         <div className={styles.demoButtonContainer}>
-          <button className={styles.demoButton} onClick={() => navigation('/demo/all')}>전체 면접 연습</button>
-          <button className={styles.demoButton} onClick={() => navigation('/demo/frontend')}>프론트엔드 면접 연습</button>
-          <button className={styles.demoButton} onClick={() => navigation('/demo/backend')}>백엔드 면접 연습</button>
+          <button 
+            className={styles.demoButton} 
+            onClick={() => navigation('/demo/all')}
+          >
+            전체 면접 연습
+          </button>
+          <button 
+            className={styles.demoButton} 
+            onClick={() => navigation('/demo/frontend')}
+          >
+            프론트엔드 면접 연습
+          </button>
+          <button 
+            className={styles.demoButton} 
+            onClick={() => navigation('/demo/backend')}
+          >
+            백엔드 면접 연습
+          </button>
         </div>
       </section>
     </main>

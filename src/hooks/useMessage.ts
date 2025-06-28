@@ -10,6 +10,7 @@ const sendMessage = async (conversationId: string, message: string) => {
     `/conversations/${conversationId}/messages`,
     data
   );
+  console.log(response)
   return response.data;
 };
 

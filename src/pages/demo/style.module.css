@@ -8,6 +8,28 @@
    해당 스크립트 태그를 <head>에 추가하거나 npm 패키지 설치 후 import하여 사용해야 합니다. */
 @import url('https://unpkg.com/@phosphor-icons/web/src/css/icons.css');
 
+.backButton {
+    position: absolute;
+    left: 2%;
+    top: 2%;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 2px 2px 4px 1px rgb(204, 204, 204);
+    cursor: pointer;
+    transition: 0.2s all;
+}
+
+.backButton:hover {
+    transform: scale(1.04);
+}
 
 /* 기본 폰트 설정 및 전체 레이아웃 (body에 해당) */
 .body {

@@ -76,7 +76,7 @@ const Question = () => {
   }, [isLoading, error, groupedQuestions, navigate]);
 
   if (isLoadingState) {
-    return <components.Loading status={loadingStatus} />;
+    return <components.PageLoading status={loadingStatus} />;
   }
 
   if (!groupedQuestions) {

@@ -31,7 +31,7 @@ export default function LastQuestioonModal() {
   return (
     <div className={ history === true ? styles.container : styles.closeContainer}>
       <h3 className={styles.text}>
-        🔔이전에 진행하던 질문이 있어요!
+        <span>🔔</span> 이전에 진행하던 질문이 있어요!
       </h3>
       <div className={styles.selectContainer}>
         <button onClick={() => canccleHistory()} >X</button>

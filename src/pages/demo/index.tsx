@@ -1,6 +1,7 @@
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
 import styles from './style.module.css'; // CSS Modules 임포트
+import { useNavigate } from 'react-router-dom';
 
 // 외부 CDN 방식의 Phosphor Icons를 사용하기 위한 최소한의 JSX 엘리먼트입니다.
 // 실제 React 앱에서는 @phosphor-icons/react 라이브러리를 설치하여 사용하는 것이 일반적입니다.
@@ -40,7 +41,11 @@ function App({catagoryProps}: propsType) {
     const [filteredQuestions, setFilteredQuestions] = useState<InterviewQuestion[]>(interviewQuestions);
     const [showAnswer, setShowAnswer] = useState(false);
     const [activeCategory, setActiveCategory] = useState('all');
+    const navigation = useNavigate()
 
+    const handleBack = () => {
+        navigation(-1)
+    }
     // 카테고리가 변경될 때마다 질문을 필터링하고 인덱스를 초기화합니다.
     useEffect(() => {
         setActiveCategory(catagoryProps)
@@ -76,6 +81,7 @@ function App({catagoryProps}: propsType) {
 
     return (
         <div className={styles.body}> {/* styles.body로 클래스 적용 */}
+            <div className={styles.backButton} onClick={() => handleBack()}>{"< 뒤로가기"}</div>
             <div className={styles.container}>
                 <div className={styles.card}>
                     <main>

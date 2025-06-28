@@ -6,10 +6,18 @@ import { useMessage } from '@/hooks';
 import { ArrowLeftGray } from '@/assets';
 import { CommonQuestionType } from '@/types';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Chat = () => {
   const { state: groupedQuestions } = useLocation();
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
+  const [isModal, setIsModal] = useState<boolean>(false)
+  const [feedbackContent, setFeedbackContent] = useState<string>('');
+  const [feedbackStrengths, setFeedbackStrengths] = useState('');
+  const [feedbackOverallImpression, setFeedbackOverallImpression] = useState('');
+  const [feedbackImprovementPoints, setFeedbackImprovementPoints] = useState('');
+  const [feedbackAdditionalAdvice, setFeedbackAdditionalAdvice] = useState('');
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
   const {
     messages,
     currentTypingId,
@@ -50,20 +58,41 @@ const Chat = () => {
     setSelectedConversationId(conversationId);
   };
 
-  const handleNextQuestion = () => {
+  const isLastQuestion = () => {
     const allQuestions = getAllQuestions();
-    if (!selectedConversationId || !allQuestions.length) return;
+    if (!selectedConversationId || !allQuestions.length) return false;
+    const currentIndex = allQuestions.findIndex(q => q.conversationId === selectedConversationId);
+    return currentIndex === allQuestions.length - 1;
+  };
 
-    const currentIndex = allQuestions.findIndex(
-      q => q.conversationId === selectedConversationId
-    );
-    const nextIndex = currentIndex + 1;
+  const handleFeedback = async () => {
+    setIsLoadingFeedback(true);
+    try {
+      await axios.post(`https://folink.kro.kr/conversations/${selectedConversationId}/feedback`, {
+        headers: { 'Accept': 'application/json' }
+      });
 
-    if (nextIndex < allQuestions.length) {
-      setSelectedConversationId(allQuestions[nextIndex].conversationId);
-    } else {
-      //마지막 질문 알림 표시,처음으로
-      setSelectedConversationId(allQuestions[0].conversationId); // 첫 번째 질문으로 순환
+      const response = await axios.get(`https://folink.kro.kr/conversations/${selectedConversationId}/feedback`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = response.data.data;
+
+      setFeedbackContent(data.content);
+      setFeedbackStrengths(data.strengths);
+      setFeedbackOverallImpression(data.overallImpression);
+      setFeedbackImprovementPoints(data.improvementPoints);
+      setFeedbackAdditionalAdvice(data.additionalAdvice);
+
+      console.log('Feedback Content:', data.content);
+      console.log('Feedback Strengths:', data.strengths);
+      console.log('Feedback Overall Impression:', data.overallImpression);
+      console.log('Feedback Improvement Points:', data.improvementPoints);
+      console.log('Feedback Additional Advice:', data.additionalAdvice);
+    } catch (error) {
+      console.error('Error processing feedback:', error);
+    } finally {
+      setIsLoadingFeedback(false);
+      setIsModal(true)
     }
   };
 
@@ -74,8 +103,23 @@ const Chat = () => {
     }
   }, [groupedQuestions]);
 
+  useEffect(() => {
+    if (messages.length >= 10 && isLastQuestion()) {
+      handleFeedback();
+    }
+  }, [messages, selectedConversationId]);
+
   return (
     <main className={styles.container}>
+      {isModal &&
+        <components.Feedback
+          feedbackContent={feedbackContent}
+          feedbackStrengths={feedbackStrengths}
+          feedbackOverallImpression={feedbackOverallImpression}
+          feedbackImprovementPoints={feedbackImprovementPoints}
+          feedbackAdditionalAdvice={feedbackAdditionalAdvice}
+        />
+      }
       <nav className={styles.nav}>
         <Link to={'/'}>
           <div className={styles.back}>
@@ -92,9 +136,8 @@ const Chat = () => {
                     questions.map((question: CommonQuestionType) => (
                       <li
                         key={`${groupName}-question-${question.id}`}
-                        className={`${styles.question} ${
-                          selectedConversationId === question.conversationId ? styles.active : ''
-                        }`}
+                        className={`${styles.question} ${selectedConversationId === question.conversationId ? styles.active : ''
+                          }`}
                         onClick={() => handleQuestionClick(question.conversationId)}
                       >
                         {renderQuestion(question)}
@@ -122,21 +165,14 @@ const Chat = () => {
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
             )}
           </div>
-          {messagesLoading ? (
-            <components.Loading />
+          {messagesLoading || isLoadingFeedback ? (
+            <components.PageLoading status='loading' />
           ) : (
             <components.MessageList
               messages={messages}
               currentTypingId={currentTypingId}
               onEndTyping={handleEndTyping}
             />
-          )}
-          {messages.length > 9 ? (
-            <button className={styles.nextButton} onClick={handleNextQuestion}>
-              다음 질문 넘어가기
-            </button>
-          ) : (
-            ''
           )}
           <components.MessageForm onSendMessage={handleSendMessage} messagesLength={messages.length} />
         </div>
