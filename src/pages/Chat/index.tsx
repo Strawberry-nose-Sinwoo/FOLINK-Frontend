@@ -1,7 +1,7 @@
 import * as components from '@/allFiles';
 import styles from './style.module.css';
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMessage } from '@/hooks';
 import { ArrowLeftGray } from '@/assets';
 import { CommonQuestionType } from '@/types';
@@ -11,13 +11,15 @@ import axios from 'axios';
 const Chat = () => {
   const { state: groupedQuestions } = useLocation();
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
-  const [isModal, setIsModal] = useState<boolean>(false)
+  const [isModal, setIsModal] = useState<boolean>(false);
   const [feedbackContent, setFeedbackContent] = useState<string>('');
-  const [feedbackStrengths, setFeedbackStrengths] = useState('');
-  const [feedbackOverallImpression, setFeedbackOverallImpression] = useState('');
-  const [feedbackImprovementPoints, setFeedbackImprovementPoints] = useState('');
-  const [feedbackAdditionalAdvice, setFeedbackAdditionalAdvice] = useState('');
-  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
+  const [feedbackStrengths, setFeedbackStrengths] = useState<string>('');
+  const [feedbackOverallImpression, setFeedbackOverallImpression] = useState<string>('');
+  const [feedbackImprovementPoints, setFeedbackImprovementPoints] = useState<string>('');
+  const [feedbackAdditionalAdvice, setFeedbackAdditionalAdvice] = useState<string>('');
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const {
     messages,
     currentTypingId,
@@ -27,14 +29,13 @@ const Chat = () => {
   } = useMessage(selectedConversationId ? String(selectedConversationId) : 'default');
 
   const getAllQuestions = (): CommonQuestionType[] => {
-    if (!groupedQuestions) {
-      return [];
-    }
-    const questions = Object.entries(groupedQuestions).flatMap(([groupName, questionList]) =>
-      (questionList as CommonQuestionType[]).map(q => ({
-        ...q,
-        title: groupName,
-      }))
+    if (!groupedQuestions) return [];
+    const questions: CommonQuestionType[] = Object.entries(groupedQuestions).flatMap(
+      ([groupName, questionList]) =>
+        (questionList as CommonQuestionType[]).map((q: CommonQuestionType) => ({
+          ...q,
+          title: groupName,
+        }))
     );
     return questions;
   };
@@ -51,17 +52,31 @@ const Chat = () => {
   const findSelectedQuestion = (): CommonQuestionType | null => {
     if (!selectedConversationId) return null;
     const allQuestions = getAllQuestions();
-    return allQuestions.find(q => q.conversationId === selectedConversationId) || null;
+    return allQuestions.find((q: CommonQuestionType) => q.conversationId === selectedConversationId) || null;
   };
 
   const handleQuestionClick = (conversationId: number) => {
     setSelectedConversationId(conversationId);
   };
 
-  const isLastQuestion = () => {
+  const handleNextQuestion = (): CommonQuestionType[] => {
+    const allQuestions: CommonQuestionType[] = getAllQuestions();
+    const currentIndex = allQuestions.findIndex(
+      (q: CommonQuestionType) => q.conversationId === selectedConversationId
+    );
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < allQuestions.length) {
+      setSelectedConversationId(allQuestions[nextIndex].conversationId);
+    }
+    return allQuestions;
+  };
+
+  const isLastQuestion = (): boolean => {
     const allQuestions = getAllQuestions();
     if (!selectedConversationId || !allQuestions.length) return false;
-    const currentIndex = allQuestions.findIndex(q => q.conversationId === selectedConversationId);
+    const currentIndex = allQuestions.findIndex(
+      (q: CommonQuestionType) => q.conversationId === selectedConversationId
+    );
     return currentIndex === allQuestions.length - 1;
   };
 
@@ -69,30 +84,27 @@ const Chat = () => {
     setIsLoadingFeedback(true);
     try {
       await axios.post(`https://folink.kro.kr/conversations/${selectedConversationId}/feedback`, {
-        headers: { 'Accept': 'application/json' }
+        headers: { Accept: 'application/json' },
       });
 
-      const response = await axios.get(`https://folink.kro.kr/conversations/${selectedConversationId}/feedback`, {
-        headers: { 'Accept': 'application/json' }
-      });
+      const response = await axios.get(
+        `https://folink.kro.kr/conversations/${selectedConversationId}/feedback`,
+        {
+          headers: { Accept: 'application/json' },
+        }
+      );
+
       const data = response.data.data;
-
       setFeedbackContent(data.content);
       setFeedbackStrengths(data.strengths);
       setFeedbackOverallImpression(data.overallImpression);
       setFeedbackImprovementPoints(data.improvementPoints);
       setFeedbackAdditionalAdvice(data.additionalAdvice);
-
-      console.log('Feedback Content:', data.content);
-      console.log('Feedback Strengths:', data.strengths);
-      console.log('Feedback Overall Impression:', data.overallImpression);
-      console.log('Feedback Improvement Points:', data.improvementPoints);
-      console.log('Feedback Additional Advice:', data.additionalAdvice);
     } catch (error) {
       console.error('Error processing feedback:', error);
     } finally {
       setIsLoadingFeedback(false);
-      setIsModal(true)
+      setIsModal(true);
     }
   };
 
@@ -104,22 +116,26 @@ const Chat = () => {
   }, [groupedQuestions]);
 
   useEffect(() => {
-    if (messages.length >= 10 && isLastQuestion()) {
+    if (messages.length >= 10) {
       handleFeedback();
     }
   }, [messages, selectedConversationId]);
 
   return (
     <main className={styles.container}>
-      {isModal &&
+      {isModal && (
         <components.Feedback
           feedbackContent={feedbackContent}
           feedbackStrengths={feedbackStrengths}
           feedbackOverallImpression={feedbackOverallImpression}
           feedbackImprovementPoints={feedbackImprovementPoints}
           feedbackAdditionalAdvice={feedbackAdditionalAdvice}
+          selectedConversationId={selectedConversationId}
+          setSelectedConversationId={setSelectedConversationId}
+          allQuestions={getAllQuestions()}
         />
-      }
+
+      )}
       <nav className={styles.nav}>
         <Link to={'/'}>
           <div className={styles.back}>
@@ -133,7 +149,7 @@ const Chat = () => {
               <ol key={groupName}>
                 <ul className={styles.questionList}>
                   {Array.isArray(questions) && questions.length > 0 ? (
-                    questions.map((question: CommonQuestionType) => (
+                    (questions as CommonQuestionType[]).map((question: CommonQuestionType) => (
                       <li
                         key={`${groupName}-question-${question.id}`}
                         className={`${styles.question} ${selectedConversationId === question.conversationId ? styles.active : ''
@@ -166,7 +182,7 @@ const Chat = () => {
             )}
           </div>
           {messagesLoading || isLoadingFeedback ? (
-            <components.PageLoading status='loading' />
+            <components.PageLoading status="loading" />
           ) : (
             <components.MessageList
               messages={messages}
