@@ -13,6 +13,7 @@ interface ModalProps {
     selectedConversationId: number | null;
     allQuestions: CommonQuestionType[];
     setSelectedConversationId: React.Dispatch<React.SetStateAction<number | null>>;
+    setIsModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Feedback = ({
@@ -24,6 +25,7 @@ const Feedback = ({
     selectedConversationId,
     setSelectedConversationId,
     allQuestions,
+    setIsModal
 }: ModalProps) => {
     const navigate = useNavigate();
     const [isLastQuestion, setIsLastQuestion] = useState<boolean>(false);
@@ -37,22 +39,21 @@ const Feedback = ({
         setIsLastQuestion(currentIndex === allQuestions.length - 1);
     }, [selectedConversationId, allQuestions]);
 
-    //버튼을 눌렀을때 실행
     const handlerClickButton = () => {
+        setIsModal(false)
         if (selectedConversationId === null) return;
 
-        //현재 선택되어있는 질문이 몇번째인지
         const currentIndex = allQuestions.findIndex(
             (q) => q.conversationId === selectedConversationId
         );
         const nextIndex = currentIndex + 1;
 
-        //현재 질문의 번지수와 모든 질문의 갯수를 비교 하여 만약 작다면 다음 질문으로
         if (nextIndex < allQuestions.length) {
+            // 다음 질문 있으면 -> 다음 질문으로 이동 + 모달 닫기
             setSelectedConversationId(allQuestions[nextIndex].conversationId);
-        }
-        //만약 현재 질문의 번지수와 모든 질문의 갯수가 같다면 메인 페이지로 이동 및 히스토리 삭제 
-        else {
+            setIsModal(false);
+        } else {
+            // 마지막 질문이면 모달은 그대로 유지 -> 홈으로 이동
             navigate('/');
             localStorage.removeItem('question_history');
         }
@@ -61,6 +62,7 @@ const Feedback = ({
     return (
         <div className={styles.overlay}>
             <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
+                <div className={styles.closeButton} onClick={() => setIsModal(false)}>X</div>
                 <h2 className={styles.title}>AI 면접관의 피드백</h2>
                 <img src={FeedbackIcon} alt="" width={150} />
                 <h3>전반적인 평가</h3>

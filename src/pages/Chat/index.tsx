@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMessage } from '@/hooks';
 import { ArrowLeftGray } from '@/assets';
 import { CommonQuestionType } from '@/types';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Chat = () => {
@@ -18,6 +18,7 @@ const Chat = () => {
   const [feedbackImprovementPoints, setFeedbackImprovementPoints] = useState<string>('');
   const [feedbackAdditionalAdvice, setFeedbackAdditionalAdvice] = useState<string>('');
   const [isLoadingFeedback, setIsLoadingFeedback] = useState<boolean>(false);
+  const [isFeedback, setIsFeedback] = useState<boolean>(false)
   const navigate = useNavigate();
 
   const {
@@ -59,54 +60,72 @@ const Chat = () => {
     setSelectedConversationId(conversationId);
   };
 
-  const handleNextQuestion = (): CommonQuestionType[] => {
-    const allQuestions: CommonQuestionType[] = getAllQuestions();
-    const currentIndex = allQuestions.findIndex(
-      (q: CommonQuestionType) => q.conversationId === selectedConversationId
-    );
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < allQuestions.length) {
-      setSelectedConversationId(allQuestions[nextIndex].conversationId);
-    }
-    return allQuestions;
-  };
-
-  const isLastQuestion = (): boolean => {
-    const allQuestions = getAllQuestions();
-    if (!selectedConversationId || !allQuestions.length) return false;
-    const currentIndex = allQuestions.findIndex(
-      (q: CommonQuestionType) => q.conversationId === selectedConversationId
-    );
-    return currentIndex === allQuestions.length - 1;
-  };
-
   const handleFeedback = async () => {
     setIsLoadingFeedback(true);
+
+    if (messages.length < 10) {
+      setIsModal(false);
+      return;
+    }
+
     try {
-      await axios.post(`https://folink.kro.kr/conversations/${selectedConversationId}/feedback`, {
-        headers: { Accept: 'application/json' },
-      });
+      // 1차 GET 시도
+      let response;
+      try {
+        response = await axios.get(
+          `https://folink.kro.kr/conversations/${selectedConversationId}/feedback`,
+          {
+            headers: { Accept: 'application/json' },
+          }
+        );
+      } catch (error: any) {
+        // 404 or 400일 때 POST 요청 후 재시도
+        if (
+          axios.isAxiosError(error) &&
+          error.response &&
+          (error.response.status === 404 || error.response.status === 400)
+        ) {
+          // 피드백 생성 요청
+          await axios.post(
+            `https://folink.kro.kr/conversations/${selectedConversationId}/feedback`,
+            null, // POST body 없음
+            {
+              headers: { Accept: 'application/json' },
+            }
+          );
 
-      const response = await axios.get(
-        `https://folink.kro.kr/conversations/${selectedConversationId}/feedback`,
-        {
-          headers: { Accept: 'application/json' },
+          // POST 후 다시 GET 시도
+          response = await axios.get(
+            `https://folink.kro.kr/conversations/${selectedConversationId}/feedback`,
+            {
+              headers: { Accept: 'application/json' },
+            }
+          );
+        } else {
+          // 다른 에러일 경우 종료
+          console.error(' 예기치 않은 피드백 요청 에러:', error);
+          setIsModal(false);
+          return;
         }
-      );
+      }
 
+      // 정상적으로 피드백 데이터 받았을 경우
       const data = response.data.data;
       setFeedbackContent(data.content);
       setFeedbackStrengths(data.strengths);
       setFeedbackOverallImpression(data.overallImpression);
       setFeedbackImprovementPoints(data.improvementPoints);
       setFeedbackAdditionalAdvice(data.additionalAdvice);
+      setIsModal(true);
+      setIsFeedback(true)
     } catch (error) {
-      console.error('Error processing feedback:', error);
+      console.error(' 최종 피드백 처리 실패:', error);
+      setIsModal(false);
     } finally {
       setIsLoadingFeedback(false);
-      setIsModal(true);
     }
   };
+
 
   useEffect(() => {
     if (!selectedConversationId && getAllQuestions().length > 0) {
@@ -118,12 +137,15 @@ const Chat = () => {
   useEffect(() => {
     if (messages.length >= 10) {
       handleFeedback();
+    } else if (messages.length < 10) {
+      setIsModal(false)
+      setIsFeedback(false)
     }
   }, [messages, selectedConversationId]);
-
+  console.log(isModal)
   return (
     <main className={styles.container}>
-      {isModal && (
+      {isModal === true && (
         <components.Feedback
           feedbackContent={feedbackContent}
           feedbackStrengths={feedbackStrengths}
@@ -133,6 +155,7 @@ const Chat = () => {
           selectedConversationId={selectedConversationId}
           setSelectedConversationId={setSelectedConversationId}
           allQuestions={getAllQuestions()}
+          setIsModal={setIsModal}
         />
 
       )}
@@ -184,12 +207,13 @@ const Chat = () => {
           {messagesLoading || isLoadingFeedback ? (
             <components.PageLoading status="loading" />
           ) : (
-            <components.MessageList
-              messages={messages}
-              currentTypingId={currentTypingId}
-              onEndTyping={handleEndTyping}
-            />
+              <components.MessageList
+                messages={messages}
+                currentTypingId={currentTypingId}
+                onEndTyping={handleEndTyping}
+              />
           )}
+          {isFeedback && <div onClick={() => setIsModal(true)} className={styles.feedbackModalOnButton}>최종 피드백</div>}
           <components.MessageForm onSendMessage={handleSendMessage} messagesLength={messages.length} />
         </div>
       </section>

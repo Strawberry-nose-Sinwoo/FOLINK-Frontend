@@ -67,7 +67,7 @@ const MessageList = ({
                     </div>
                     {isEvaluatorFeedbackOpen && (
                       <div className={styles.inner_thought}>
-                        {message.evaluatorFeedback}
+                        "{message.evaluatorFeedback}"
                       </div>
                     )}
                   </div>

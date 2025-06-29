@@ -216,3 +216,7 @@
     width: 100%;
   }
 }
+
+.closeButton {
+    cursor: pointer;
+}
