@@ -103,6 +103,10 @@
   margin-bottom: 10px;
 }
 
+.strikethrough {
+  text-decoration: line-through;
+}
+
 @keyframes openButton {
   0% {
     opacity: 0;

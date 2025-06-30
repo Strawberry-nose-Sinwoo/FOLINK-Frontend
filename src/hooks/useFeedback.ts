@@ -17,7 +17,7 @@ export const useFeedback = () => {
   const [feedbackImprovementPoints, setFeedbackImprovementPoints] = useState<string>('');
   const [feedbackAdditionalAdvice, setFeedbackAdditionalAdvice] = useState<string>('');
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [isFeedback, setIsFeedback] = useState<boolean>(false);
+  const [isFeedback, setIsFeedback] = useState<{ [key: number]: boolean }>({});
 
   const feedbackMutation = useMutation({
     mutationFn: async (conversationId: number | null) => {
@@ -29,20 +29,11 @@ export const useFeedback = () => {
       try {
         let response;
         try {
-          response = await getWithToken(
-            null, 
-            `/conversations/${conversationId}/feedback`
-          );
+          response = await getWithToken(null, `/conversations/${conversationId}/feedback`);
         } catch (error: any) {
           if (error.response?.status === 404 || error.response?.status === 400) {
-            await postWithToken(
-              null, 
-              `/conversations/${conversationId}/feedback`,
-            );
-            response = await getWithToken(
-              null,
-              `/conversations/${conversationId}/feedback`
-            );
+            await postWithToken(null, `/conversations/${conversationId}/feedback`);
+            response = await getWithToken(null, `/conversations/${conversationId}/feedback`);
           } else {
             console.error('예기치 않은 피드백 요청 에러:', error);
             setIsModal(false);
@@ -57,24 +48,31 @@ export const useFeedback = () => {
         setFeedbackImprovementPoints(data.improvementPoints);
         setFeedbackAdditionalAdvice(data.additionalAdvice);
         setIsModal(true);
-        setIsFeedback(true);
+        setIsFeedback((prev) => ({
+          ...prev,
+          [conversationId]: true,
+        }));
       } catch (error) {
         console.error('최종 피드백 처리 실패:', error);
         setIsModal(false);
+        setIsFeedback((prev) => ({
+          ...prev,
+          [conversationId]: false,
+        }));
         throw error;
       }
     },
   });
 
   return {
-    feedbackContent, 
-    feedbackStrengths, 
+    feedbackContent,
+    feedbackStrengths,
     feedbackOverallImpression,
-    feedbackImprovementPoints, 
+    feedbackImprovementPoints,
     feedbackAdditionalAdvice,
-    isModal, 
+    isModal,
     isLoadingFeedback: feedbackMutation.isPending,
-    isFeedback, 
+    isFeedback,
     setIsFeedback,
     setIsModal,
     handleFeedback: feedbackMutation.mutate,

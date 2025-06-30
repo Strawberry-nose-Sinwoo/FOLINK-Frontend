@@ -85,11 +85,14 @@ const Chat = () => {
   useEffect(() => {
     if (messages.length >= 10) {
       handleFeedback(selectedConversationId);
-    } else if (messages.length < 10) {
-      setIsModal(false)
-      setIsFeedback(false)
+    } else if (messages.length < 10 && selectedConversationId !== null) {
+      setIsModal(false);
+      setIsFeedback((prev: { [key: number]: boolean }) => ({
+        ...prev,
+        [selectedConversationId]: false,
+      }));
     }
-  }, [messages, selectedConversationId]);
+  }, [messages, selectedConversationId, setIsFeedback, setIsModal]);
 
   return (
     <main className={styles.container}>
@@ -126,10 +129,8 @@ const Chat = () => {
                           selectedConversationId === question.conversationId
                             ? styles.active
                             : ''
-                        }`}
-                        onClick={() =>
-                          handleQuestionClick(question.conversationId)
-                        }
+                        } ${isFeedback[question.conversationId] ? styles.strikethrough : ''}`}
+                        onClick={() => handleQuestionClick(question.conversationId)}
                       >
                         {renderQuestion(question)}
                       </li>
@@ -150,8 +151,7 @@ const Chat = () => {
           <div className={styles.chatHeader}>
             {selectedConversationId && findSelectedQuestion() ? (
               <h2 className={styles.chatTitle}>
-                {findSelectedQuestion()?.title}:{' '}
-                {findSelectedQuestion()?.question}
+                {findSelectedQuestion()?.title}: {findSelectedQuestion()?.question}
               </h2>
             ) : (
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
@@ -169,7 +169,7 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-          {isFeedback && (
+          {selectedConversationId !== null && isFeedback[selectedConversationId] && (
             <div
               onClick={() => setIsModal(true)}
               className={styles.feedbackModalOnButton}
