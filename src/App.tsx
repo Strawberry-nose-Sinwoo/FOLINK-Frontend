@@ -9,7 +9,9 @@ function App() {
         <Route path={'/'} element={<route.Main />} />
         <Route path={'/chat'} element={<route.Chat />} />
         <Route path={'/question/:questionId'} element={<route.Question />} />
-        <Route path={'/demo'} element={<route.Demo/>} />
+        <Route path={'/demo/all'} element={<route.Demo catagoryProps='all'/>} />
+        <Route path={'/demo/frontend'} element={<route.Demo catagoryProps='프론트엔드'/>} />
+        <Route path={'/demo/backend'} element={<route.Demo catagoryProps='백엔드'/>} />
       </Routes>
     </Router>
   );

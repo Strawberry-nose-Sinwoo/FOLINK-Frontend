@@ -14,6 +14,7 @@ const Main = () => {
     fileInputRef,
     isDragging,
     isUploading,
+    progress,
     handleClick,
     handleFileChange,
     handleDragEnter,
@@ -32,10 +33,10 @@ const Main = () => {
 
   return (
     <main className={styles.container}>
-      {isUploading && <components.Loading status="loading" />}
-      {
-        historyQuesitonId !== null && <components.LastQuestioonModal/>
-      }
+      {isUploading && (
+        <components.QuestionLoading status="loading" progress={progress} />
+      )}
+      {historyQuesitonId !== null && <components.LastQuestioonModal />}
       <section className={styles.main}>
         <header className={styles.title_container}>
           <h1>
@@ -78,6 +79,26 @@ const Main = () => {
             </button>
           </section>
         </section>
+        <div className={styles.demoButtonContainer}>
+          <button
+            className={styles.demoButton}
+            onClick={() => navigation('/demo/all')}
+          >
+            전체 면접 연습
+          </button>
+          <button
+            className={styles.demoButton}
+            onClick={() => navigation('/demo/frontend')}
+          >
+            프론트엔드 면접 연습
+          </button>
+          <button
+            className={styles.demoButton}
+            onClick={() => navigation('/demo/backend')}
+          >
+            백엔드 면접 연습
+          </button>
+        </div>
       </section>
     </main>
   );
