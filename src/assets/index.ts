@@ -7,6 +7,7 @@ import ArrowUpWhite from './Arrow-Up-White.png'
 import ArrowUpBlue from './Arrow-Up-Blue.png'
 import Close from './Close.png';
 import Upload from './Upload.png';
+import FinallyFeedbackIcon from './FeedbackIcon.png';
 
 export {
   ArrowRight,
@@ -18,4 +19,5 @@ export {
   ArrowUpBlue,
   Close,
   Upload,
+  FinallyFeedbackIcon,
 };

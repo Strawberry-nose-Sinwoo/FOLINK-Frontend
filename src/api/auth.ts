@@ -5,7 +5,7 @@ import { AxiosRequestConfig } from "axios";
 export const postWithToken = async (
   accessToken: string | null,
   url: string,
-  data: PostType | signInType | signUpType | FormData,
+  data?: PostType | signInType | signUpType | FormData,
   config: AxiosRequestConfig = {} 
 ): Promise<any> => {
   try {

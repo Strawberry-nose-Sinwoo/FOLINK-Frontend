@@ -29,7 +29,7 @@ const MessageForm = ({ onSendMessage, isSubmitting = false, isAiTyping = false, 
         onChange={(e) => setMessage(e.target.value)}
         placeholder="면접 질문에 대한 답을 입력하세요."
         aria-label="메시지 입력"
-        disabled={isSubmitting || isAiTyping || messagesLength >= 9 ? true : false} // Disable input if submitting, AI is typing, or no messages
+        disabled={isSubmitting || isAiTyping || messagesLength >= 9 ? true : false} 
       />
       <button
         className={styles.send_button}
