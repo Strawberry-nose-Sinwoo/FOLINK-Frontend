@@ -1,6 +1,6 @@
 import Main from "./pages/Main";
 import Chat from "./pages/Chat";
-import Demo from './pages/demo'
+import Demo from './pages/Demo'
 import Question from "./pages/Question";
 import { Toastify } from "./components/Toastify";
 import MessageForm from './components/Message/Form';

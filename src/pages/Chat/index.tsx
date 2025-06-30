@@ -5,12 +5,12 @@ import { useMessage, useFeedback } from '@/hooks';
 import { ArrowLeftGray } from '@/assets';
 import { CommonQuestionType } from '@/types';
 import { useEffect, useState } from 'react';
+import Skeleton from './Skeleton';
 
 const Chat = () => {
   const { state: groupedQuestions } = useLocation();
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
 
-  // 메시지 관련 훅
   const {
     messages,
     currentTypingId,
@@ -19,7 +19,6 @@ const Chat = () => {
     messagesLoading,
   } = useMessage(selectedConversationId ? String(selectedConversationId) : 'default');
 
-  // 피드백 관련 훅
   const {
     feedbackContent,
     feedbackStrengths,
@@ -34,7 +33,6 @@ const Chat = () => {
     handleFeedback,
   } = useFeedback();
 
-  // 모든 질문 가져오기
   const getAllQuestions = (): CommonQuestionType[] => {
     if (!groupedQuestions) {
       return [];
@@ -49,7 +47,6 @@ const Chat = () => {
     return questions;
   };
 
-  // 질문 텍스트 렌더링 (15자 이상 시 생략)
   const renderQuestion = (question: CommonQuestionType): string => {
     try {
       const questionText = question.question;
@@ -59,7 +56,6 @@ const Chat = () => {
     }
   };
 
-  // 선택된 질문 찾기
   const findSelectedQuestion = (): CommonQuestionType | null => {
     if (!selectedConversationId) return null;
     const allQuestions = getAllQuestions();
@@ -67,12 +63,10 @@ const Chat = () => {
     return selected;
   };
 
-  // 질문 클릭 핸들러
   const handleQuestionClick = (conversationId: number) => {
     setSelectedConversationId(conversationId);
   };
 
-  // 초기 질문 설정
   useEffect(() => {
     if (!selectedConversationId && getAllQuestions().length > 0) {
       const firstQuestion = getAllQuestions()[0];
@@ -80,7 +74,6 @@ const Chat = () => {
     }
   }, [groupedQuestions]);
 
-  // 메시지 길이가 10개 이상일 때 피드백 요청
   useEffect(() => {
     if (messages.length >= 10) {
       handleFeedback(selectedConversationId);
@@ -130,9 +123,13 @@ const Chat = () => {
                       <li
                         key={`${groupName}-question-${question.id}`}
                         className={`${styles.question} ${
-                          selectedConversationId === question.conversationId ? styles.active : ''
+                          selectedConversationId === question.conversationId
+                            ? styles.active
+                            : ''
                         }`}
-                        onClick={() => handleQuestionClick(question.conversationId)}
+                        onClick={() =>
+                          handleQuestionClick(question.conversationId)
+                        }
                       >
                         {renderQuestion(question)}
                       </li>
@@ -153,14 +150,18 @@ const Chat = () => {
           <div className={styles.chatHeader}>
             {selectedConversationId && findSelectedQuestion() ? (
               <h2 className={styles.chatTitle}>
-                {findSelectedQuestion()?.title}: {findSelectedQuestion()?.question}
+                {findSelectedQuestion()?.title}:{' '}
+                {findSelectedQuestion()?.question}
               </h2>
             ) : (
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
             )}
           </div>
           {messagesLoading || isLoadingFeedback ? (
-            <components.PageLoading />
+            <>
+              <components.PageLoading />
+              <Skeleton />
+            </>
           ) : (
             <components.MessageList
               messages={messages}
@@ -168,7 +169,14 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-           {isFeedback && <div onClick={() => setIsModal(true)} className={styles.feedbackModalOnButton}>최종 피드백 보기</div>}
+          {isFeedback && (
+            <div
+              onClick={() => setIsModal(true)}
+              className={styles.feedbackModalOnButton}
+            >
+              최종 피드백 보기
+            </div>
+          )}
           <div className={styles.message_form_container}>
             <components.MessageForm
               onSendMessage={handleSendMessage}
