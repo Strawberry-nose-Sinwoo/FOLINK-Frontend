@@ -159,7 +159,6 @@ const Chat = () => {
           </div>
           {messagesLoading || isLoadingFeedback ? (
             <>
-              <components.PageLoading />
               <Skeleton />
             </>
           ) : (
@@ -189,4 +188,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default Chat;  

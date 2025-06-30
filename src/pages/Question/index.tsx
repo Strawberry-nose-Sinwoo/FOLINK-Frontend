@@ -93,7 +93,7 @@ const Question = () => {
 
   return (
     <div className={style.container}>
-      {isLoadingState && <components.PageLoading status={loadingStatus} />}
+      {isLoadingState && <components.Loading type='page' status={loadingStatus} />}
       <img
         className={style.back_button}
         src={ArrowLeft}

@@ -61,6 +61,10 @@
   opacity: 0; 
 }
 
+.feedbackImg {
+  width: 120px;
+}
+
 .textFadeIn {
   animation: textFadeIn 0.3s ease forwards; 
 }

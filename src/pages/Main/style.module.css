@@ -120,9 +120,21 @@
   border: none;
   font-size: 1rem;
   font-weight: bold;
-  color: white; 
+  color: white;
   background: linear-gradient(90deg, #9333EA, #4F46E5);
   margin-top: 30px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pdf_btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(147, 51, 234, 0.3);
+}
+
+.pdf_btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
 }
 
 .demoButtonContainer {

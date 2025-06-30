@@ -34,7 +34,7 @@ const Main = () => {
   return (
     <main className={styles.container}>
       {isUploading && (
-        <components.QuestionLoading status="loading" progress={progress} />
+        <components.Loading type='question' status="loading" progress={progress} />
       )}
       {historyQuesitonId !== null && <components.LastQuestioonModal />}
       <section className={styles.main}>

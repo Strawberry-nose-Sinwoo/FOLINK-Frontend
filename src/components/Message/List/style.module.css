@@ -78,6 +78,8 @@ box-shadow: 0.125rem 0.125rem 0.5rem var(--shadow);
   font-size: 14px;
   border-radius: 8px;
   animation: fadeIn 0.3s ease-in;
+  color: rgb(96, 96, 96);
+  line-height: 2;
 }
 
 @keyframes fadeIn {

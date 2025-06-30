@@ -6,7 +6,7 @@ import { Toastify } from "./components/Toastify";
 import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
-import { PageLoading, QuestionLoading } from "./components/Loading";
+import { Loading } from './components/Loading';
 import LastQuestioonModal from "./components/LastQuestioonModal";
 import Feedback from "./components/FinallyFeedback";
 
@@ -14,13 +14,12 @@ export {
   Main,
   Chat,
   Question,
+  Demo,
   Toastify,
   MessageForm,
   MessageList,
   QuestionList,
-  PageLoading,
-  QuestionLoading,
+  Loading,
   LastQuestioonModal,
-  Demo,
-  Feedback
+  Feedback,
 };

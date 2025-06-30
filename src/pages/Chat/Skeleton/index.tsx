@@ -15,7 +15,7 @@ const Skeleton = () => {
             <div className={styles.ai_message}>
               <div
                 className={styles.skeleton_item}
-                style={{ width: `${randomWidth()}px`, height: '14.5px' }}
+                style={{ width: `${randomWidth()}px`, height: '15px' }}
               />
             </div>
             <div className={styles.user_message}>
