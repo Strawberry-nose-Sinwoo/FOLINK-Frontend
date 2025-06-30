@@ -43,7 +43,7 @@ export const useMessage = (conversationId: string) => {
           id: msg.id,
           userResponse: msg.content,
           isUser: msg.type === 'user',
-          isTyping: false, 
+          isTyping: false,
           evaluatorFeedback: msg.evaluatorFeedback || null,
           createdAt: msg.created_at,
         }))
@@ -60,7 +60,7 @@ export const useMessage = (conversationId: string) => {
         setCurrentTypingId(nextTypingMessage.id);
         setTimeout(() => {
           handleEndTyping(nextTypingMessage.id);
-        }, 2000); 
+        }, 2000);
       }
     }
   }, [messages, currentTypingId]);
@@ -81,7 +81,7 @@ export const useMessage = (conversationId: string) => {
         },
         {
           id: messageId + 1,
-          userResponse: '', 
+          userResponse: '답변을 준비 중입니다..',
           isUser: false,
           isTyping: true,
           evaluatorFeedback: null,
@@ -101,21 +101,20 @@ export const useMessage = (conversationId: string) => {
                   id: aiMessage.id,
                   userResponse: aiMessage.content,
                   isUser: false,
-                  isTyping: false,
+                  isTyping: true,
                   evaluatorFeedback: aiMessage.evaluatorFeedback || null,
                   createdAt: aiMessage.created_at,
                 }
               : msg
           )
         );
-        setCurrentTypingId(null);
       }
     },
     onError: error => {
       setMessages(prev =>
         prev.map(msg =>
           msg.id === currentTypingId
-            ? { ...msg, userResponse: `오류: ${error.message || '알 수 없는 오류'}`, isTyping: false }
+            ? { ...msg, userResponse: `${error}`, isTyping: false }
             : msg
         )
       );
