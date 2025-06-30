@@ -1,27 +1,40 @@
 import * as components from '@/allFiles';
 import styles from './style.module.css';
-
 import { Link, useLocation } from 'react-router-dom';
-import { useMessage } from '@/hooks';
+import { useMessage, useFeedback } from '@/hooks';
 import { ArrowLeftGray } from '@/assets';
 import { CommonQuestionType } from '@/types';
 import { useEffect, useState } from 'react';
 
 const Chat = () => {
   const { state: groupedQuestions } = useLocation();
-  const [selectedConversationId, setSelectedConversationId] = useState<
-    number | null
-  >(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
+
+  // 메시지 관련 훅
   const {
     messages,
     currentTypingId,
     handleSendMessage,
     handleEndTyping,
     messagesLoading,
-  } = useMessage(
-    selectedConversationId ? String(selectedConversationId) : 'default'
-  );
+  } = useMessage(selectedConversationId ? String(selectedConversationId) : 'default');
 
+  // 피드백 관련 훅
+  const {
+    feedbackContent,
+    feedbackStrengths,
+    feedbackOverallImpression,
+    feedbackImprovementPoints,
+    feedbackAdditionalAdvice,
+    isModal,
+    isLoadingFeedback,
+    isFeedback,
+    setIsFeedback,
+    setIsModal,
+    handleFeedback,
+  } = useFeedback();
+
+  // 모든 질문 가져오기
   const getAllQuestions = (): CommonQuestionType[] => {
     if (!groupedQuestions) {
       return [];
@@ -36,30 +49,30 @@ const Chat = () => {
     return questions;
   };
 
+  // 질문 텍스트 렌더링 (15자 이상 시 생략)
   const renderQuestion = (question: CommonQuestionType): string => {
     try {
       const questionText = question.question;
-      return questionText.length >= 15
-        ? `${questionText.slice(0, 15)}...`
-        : questionText;
+      return questionText.length >= 15 ? `${questionText.slice(0, 15)}...` : questionText;
     } catch (error) {
       return '유효하지 않은 질문';
     }
   };
 
+  // 선택된 질문 찾기
   const findSelectedQuestion = (): CommonQuestionType | null => {
     if (!selectedConversationId) return null;
     const allQuestions = getAllQuestions();
-    const selected =
-      allQuestions.find(q => q.conversationId === selectedConversationId) ||
-      null;
+    const selected = allQuestions.find(q => q.conversationId === selectedConversationId) || null;
     return selected;
   };
 
+  // 질문 클릭 핸들러
   const handleQuestionClick = (conversationId: number) => {
     setSelectedConversationId(conversationId);
   };
 
+  // 초기 질문 설정
   useEffect(() => {
     if (!selectedConversationId && getAllQuestions().length > 0) {
       const firstQuestion = getAllQuestions()[0];
@@ -67,25 +80,39 @@ const Chat = () => {
     }
   }, [groupedQuestions]);
 
-  const handleNextQuestion = () => {
-    const allQuestions = getAllQuestions();
-    if (!selectedConversationId || !allQuestions.length) return;
-
-    const currentIndex = allQuestions.findIndex(
-      q => q.conversationId === selectedConversationId
-    );
-    const nextIndex = currentIndex + 1;
-
-    if (nextIndex < allQuestions.length) {
-      setSelectedConversationId(allQuestions[nextIndex].conversationId);
+  // 메시지 길이가 10개 이상일 때 피드백 요청
+  useEffect(() => {
+    if (messages.length >= 10) {
+      handleFeedback(selectedConversationId);
     } else {
-      //마지막 질문 알림 표시,처음으로
-      setSelectedConversationId(allQuestions[0].conversationId); // 첫 번째 질문으로 순환
+      setIsModal(false);
     }
-  };
+  }, [messages, selectedConversationId, handleFeedback, setIsModal]);
+
+  useEffect(() => {
+    if (messages.length >= 10) {
+      handleFeedback(selectedConversationId);
+    } else if (messages.length < 10) {
+      setIsModal(false)
+      setIsFeedback(false)
+    }
+  }, [messages, selectedConversationId]);
 
   return (
     <main className={styles.container}>
+      {isModal && (
+        <components.Feedback
+          feedbackContent={feedbackContent}
+          feedbackStrengths={feedbackStrengths}
+          feedbackOverallImpression={feedbackOverallImpression}
+          feedbackImprovementPoints={feedbackImprovementPoints}
+          feedbackAdditionalAdvice={feedbackAdditionalAdvice}
+          selectedConversationId={selectedConversationId}
+          setSelectedConversationId={setSelectedConversationId}
+          allQuestions={getAllQuestions()}
+          setIsModal={setIsModal}
+        />
+      )}
       <nav className={styles.nav}>
         <Link to={'/'}>
           <div className={styles.back}>
@@ -103,13 +130,9 @@ const Chat = () => {
                       <li
                         key={`${groupName}-question-${question.id}`}
                         className={`${styles.question} ${
-                          selectedConversationId === question.conversationId
-                            ? styles.active
-                            : ''
+                          selectedConversationId === question.conversationId ? styles.active : ''
                         }`}
-                        onClick={() =>
-                          handleQuestionClick(question.conversationId)
-                        }
+                        onClick={() => handleQuestionClick(question.conversationId)}
                       >
                         {renderQuestion(question)}
                       </li>
@@ -130,14 +153,13 @@ const Chat = () => {
           <div className={styles.chatHeader}>
             {selectedConversationId && findSelectedQuestion() ? (
               <h2 className={styles.chatTitle}>
-                {findSelectedQuestion()?.title}:{' '}
-                {findSelectedQuestion()?.question}
+                {findSelectedQuestion()?.title}: {findSelectedQuestion()?.question}
               </h2>
             ) : (
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
             )}
           </div>
-          {messagesLoading ? (
+          {messagesLoading || isLoadingFeedback ? (
             <components.PageLoading />
           ) : (
             <components.MessageList
@@ -146,13 +168,12 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-          {messages.length > 9 ? (
-            <button className={styles.nextButton} onClick={handleNextQuestion}>다음 질문 넘어가기</button>
-          ) : (
-            ''
-          )}
+           {isFeedback && <div onClick={() => setIsModal(true)} className={styles.feedbackModalOnButton}>최종 피드백 보기</div>}
           <div className={styles.message_form_container}>
-            <components.MessageForm onSendMessage={handleSendMessage} messagesLength={messages.length} />
+            <components.MessageForm
+              onSendMessage={handleSendMessage}
+              messagesLength={messages.length}
+            />
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ import MessageList from "./components/Message/List";
 import QuestionList from "./components/Question";
 import { PageLoading, QuestionLoading } from "./components/Loading";
 import LastQuestioonModal from "./components/LastQuestioonModal";
+import Feedback from "./components/FinallyFeedback";
 
 export {
   Main,
@@ -20,5 +21,6 @@ export {
   PageLoading,
   QuestionLoading,
   LastQuestioonModal,
-  Demo
+  Demo,
+  Feedback
 };
