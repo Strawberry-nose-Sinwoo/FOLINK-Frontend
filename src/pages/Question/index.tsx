@@ -9,6 +9,7 @@ import { ArrowLeft } from '@/assets';
 import { CommonQuestionType } from '@/types';
 import { Toastify } from '@/allFiles';
 import { useGetQuestion } from '@/hooks';
+import Skeleton from './Skeleton';
 
 interface GroupedQuestions {
   projectQuestions: { [key: string]: CommonQuestionType[] };
@@ -75,10 +76,6 @@ const Question = () => {
     }
   }, [isLoading, error, groupedQuestions, navigate]);
 
-  if (isLoadingState) {
-    return <components.PageLoading status={loadingStatus} />;
-  }
-
   if (!groupedQuestions) {
     return null;
   }
@@ -96,6 +93,7 @@ const Question = () => {
 
   return (
     <div className={style.container}>
+      {isLoadingState && <components.PageLoading status={loadingStatus} />}
       <img
         className={style.back_button}
         src={ArrowLeft}
@@ -113,14 +111,18 @@ const Question = () => {
           </h2>
           <div className={style.list_container_1}>
             <div className={style.list_container_2}>
-              {Object.entries(groupedQuestions.projectQuestions).map(
-                ([title, questions]) => (
-                  <div className={style.list_container_3} key={title}>
-                    <div className={style.title_box}>
-                      <h3 className={style.title}>{title}</h3>
+              {isLoadingState ? (
+                <Skeleton />
+              ) : (
+                Object.entries(groupedQuestions.projectQuestions).map(
+                  ([title, questions]) => (
+                    <div className={style.list_container_3} key={title}>
+                      <div className={style.title_box}>
+                        <h3 className={style.title}>{title}</h3>
+                      </div>
+                      <components.QuestionList Questions={questions} />
                     </div>
-                    <components.QuestionList Questions={questions} />
-                  </div>
+                  )
                 )
               )}
             </div>
@@ -133,14 +135,18 @@ const Question = () => {
           </h2>
           <div className={style.list_container_1}>
             <div className={style.list_container_2}>
-              {Object.entries(groupedQuestions.techStackQuestions).map(
-                ([title, questions]) => (
-                  <div className={style.list_container_3} key={title}>
-                    <div className={style.title_box}>
-                      <h3 className={style.title}>{title}</h3>
+              {isLoadingState ? (
+                <Skeleton />
+              ) : (
+                Object.entries(groupedQuestions.techStackQuestions).map(
+                  ([title, questions]) => (
+                    <div className={style.list_container_3} key={title}>
+                      <div className={style.title_box}>
+                        <h3 className={style.title}>{title}</h3>
+                      </div>
+                      <components.QuestionList Questions={questions} />
                     </div>
-                    <components.QuestionList Questions={questions} />
-                  </div>
+                  )
                 )
               )}
             </div>

@@ -1,0 +1,39 @@
+.list_container_3 {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; 
+}
+
+.list_container_3::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%; 
+  width: 200%; 
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(165, 165, 165, 0.04) 0%,   
+    rgba(255, 255, 255, 0.20) 50%,  
+    rgba(165, 165, 165, 0.04) 100%   
+  );
+  animation: shimmer 1.5s infinite ease-in-out;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
