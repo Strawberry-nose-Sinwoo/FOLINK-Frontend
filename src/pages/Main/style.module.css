@@ -21,7 +21,11 @@
   }
 
   & h1 span {
-    color: #9333EA;
+    background: linear-gradient(90deg, #9333EA, #4F46E5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
   }
 }
 
@@ -111,14 +115,52 @@
 
 .pdf_btn {
   width: 17rem;
-  padding: 10px 0;
+  padding: 15px 0;
   border-radius: 0.5rem;
   border: none;
   font-size: 1rem;
   font-weight: bold;
-  color: white; 
+  color: white;
   background: linear-gradient(90deg, #9333EA, #4F46E5);
-  margin-top: 0px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pdf_btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(147, 51, 234, 0.3);
+}
+
+.pdf_btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+}
+
+.demoButtonContainer {
+  width: 49rem;
+  display: flex;
+  justify-content: center;
+}
+
+.demoButton {
+  padding: 9px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.108);
+  background-color: white;
+  margin: 0 20px;
+  font-weight: 500;
+  background: linear-gradient(90deg, #A75EFF, #342AE8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  transition: 0.3s all;
+}
+
+.demoButton:hover {
+  transform: scale(1.05);
 }
 
 /* .file_info {

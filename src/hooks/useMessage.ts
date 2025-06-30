@@ -25,8 +25,6 @@ export const useMessage = (conversationId: string) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [currentTypingId, setCurrentTypingId] = useState<null | number>(null);
 
-  console.log(messages)
-
   const {
     data: serverMessages,
     isLoading: messagesLoading,
@@ -35,7 +33,7 @@ export const useMessage = (conversationId: string) => {
     queryKey: ['messages', conversationId],
     queryFn: () => fetchMessages(conversationId),
     enabled: conversationId !== 'default',
-    refetchInterval: 5000,
+    refetchInterval: 3000,
   });
 
   useEffect(() => {
@@ -137,6 +135,8 @@ export const useMessage = (conversationId: string) => {
     setCurrentTypingId(null);
   };
 
+  const isAiTyping = messages.some(msg => !msg.isUser && msg.isTyping);
+
   return {
     messages,
     currentTypingId,
@@ -145,5 +145,6 @@ export const useMessage = (conversationId: string) => {
     messagesLoading,
     messagesError,
     isSubmitting: sendMessageMutation.isPending,
+    isAiTyping,
   };
 };

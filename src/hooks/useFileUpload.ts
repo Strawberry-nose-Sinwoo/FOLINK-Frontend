@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { postWithToken } from '@/api';
 import { PdfUploadTypes } from '@/types';
@@ -11,6 +11,7 @@ interface FileUploadOptions {
 
 export const useFileUpload = ({ onUploadSuccess }: FileUploadOptions = {}) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [progress, setProgress] = useState<number>(0); 
 
   const uploadMutation = useMutation<PdfUploadTypes, Error>({
     mutationFn: async () => {
@@ -24,12 +25,26 @@ export const useFileUpload = ({ onUploadSuccess }: FileUploadOptions = {}) => {
       const response = await postWithToken(
         null,
         '/question-sets/generate-by-pdf',
-        formData
+        formData,
+        {
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setProgress(percentCompleted); 
+            }
+          },
+        }
       );
       return response;
     },
     onError: (error) => {
       Toastify({ type: 'error', message: `업로드 실패: ${error.message}` });
+      setProgress(0); 
+    },
+    onSuccess: () => {
+      setProgress(100); 
     },
   });
 
@@ -56,6 +71,7 @@ export const useFileUpload = ({ onUploadSuccess }: FileUploadOptions = {}) => {
         fileInputRef.current.files = dataTransfer.files;
       }
 
+      setProgress(0);
       uploadMutation.mutate(undefined, {
         onSuccess: (response) => {
           onUploadSuccess?.(response);
@@ -89,6 +105,7 @@ export const useFileUpload = ({ onUploadSuccess }: FileUploadOptions = {}) => {
     fileInputRef,
     isDragging,
     isUploading: uploadMutation.isPending,
+    progress, 
     handleClick,
     handleFileChange,
     handleDragEnter,

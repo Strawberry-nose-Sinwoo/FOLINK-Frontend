@@ -1,0 +1,183 @@
+.container {
+  position: absolute;
+  width: 360px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  top: 20px;
+  right: -100%;
+  animation: slideIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 1000;
+}
+
+.closeContainer {
+  position: absolute;
+  width: 360px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  top: 20px;
+  right: 20px;
+  animation: slideOut 0.35s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d1d1f;
+  padding: 16px 16px 12px 16px;
+  margin: 0;
+  line-height: 1.4;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.bell {
+  animation: Jingling 2s 0.5s ease-in-out;
+}
+
+.selectContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 16px 16px 16px;
+  gap: 8px;
+}
+
+.selectContainer > button:nth-child(1) {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 12px;
+  font-weight: 600;
+  color: #86868b;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.selectContainer > button:nth-child(1):hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #1d1d1f;
+}
+
+.selectContainer > button:nth-child(2) {
+  height: 28px;
+  padding: 0 12px;
+  background: linear-gradient(90deg, #A75EFF 0%, #342AE8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.selectContainer > button:nth-child(2):active {
+  background: linear-gradient(90deg, #A75EFF 0%, #342AE8 100%);
+  transform: scale(0.98);
+}
+
+/* 모바일에서는 조금 더 큰 사이즈 */
+@media (max-width: 768px) {
+  .container,
+  .closeContainer {
+    width: calc(100vw - 40px);
+    max-width: 360px;
+  }
+  
+  .text {
+    font-size: 14px;
+  }
+  
+  .selectContainer > button:nth-child(1) {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+  
+  .selectContainer > button:nth-child(2) {
+    height: 32px;
+    font-size: 13px;
+    padding: 0 14px;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    right: -100%;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    right: 20px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    right: 20px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    right: -100%;
+    opacity: 0;
+    display: none;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes Jingling {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(2deg);
+  }
+  20% {
+    transform: rotate(-3deg);
+  }
+  30% {
+    transform: rotate(5deg);
+  }
+  40% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-10deg);
+  }
+  70% {
+    transform: rotate(7deg);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+  90% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

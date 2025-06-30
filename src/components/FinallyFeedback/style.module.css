@@ -1,0 +1,222 @@
+.overlay {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: open 0.3s ease-out forwards;
+  z-index: 100;
+}
+
+.modalContainer {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  width: 480px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(52, 42, 232, 0.15);
+  transform: translateY(20px);
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.feedbackContainer {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a75eff 0%, #342ae8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.illustration {
+  width: 80px;
+  height: 80px;
+  background-color: #cccccc;
+  margin: 0 auto 16px;
+}
+
+.content {
+  font-size: 15px;
+  font-weight: 400;
+  color: #374151;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(52, 42, 232, 0.05);
+}
+
+.modalContainer h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+  margin-top: 24px;
+  letter-spacing: -0.01em;
+}
+
+.modalContainer h3:first-of-type {
+  margin-top: 16px;
+}
+
+.subContent {
+  font-size: 15px;
+  font-weight: 400;
+  color: #374151;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(52, 42, 232, 0.05);
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.button {
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.primary {
+  background: linear-gradient(135deg, #a75eff 0%, #342ae8 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(52, 42, 232, 0.25);
+}
+
+.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(52, 42, 232, 0.35);
+}
+
+.secondary {
+  background-color: #f8fafc;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.secondary:hover {
+  background-color: #f1f5f9;
+  color: #374151;
+}
+
+.modalContainer > img {
+  display: block;
+  margin: 0 auto 24px auto;
+  filter: drop-shadow(0 4px 12px rgba(52, 42, 232, 0.15));
+}
+
+.modalContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.meetOtherInterviewer {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #a75eff 0%, #342ae8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(52, 42, 232, 0.25);
+  letter-spacing: -0.01em;
+  position: relative;
+  overflow: hidden;
+}
+
+.meetOtherInterviewer:hover {
+  transform: translateY(-2px);
+}
+
+.meetOtherInterviewer:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(52, 42, 232, 0.3);
+}
+
+@keyframes open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .modalContainer {
+    width: 95vw;
+    padding: 32px 24px;
+    border-radius: 20px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .content,
+  .subContent {
+    font-size: 14px;
+    padding: 16px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
+
+.closeButton {
+    cursor: pointer;
+}
