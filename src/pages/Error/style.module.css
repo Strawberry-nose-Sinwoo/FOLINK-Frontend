@@ -1,0 +1,41 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #F9FAFB;
+  text-align: center;
+  padding: 20px;
+}
+
+.code {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #9333EA, #4F46E5);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 1rem;
+}
+
+.message {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: #4B5563;
+}
+
+.homeButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(90deg, #9333EA, #4F46E5);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.homeButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(147, 51, 234, 0.3);
+}

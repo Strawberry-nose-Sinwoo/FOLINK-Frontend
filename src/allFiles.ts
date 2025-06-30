@@ -2,6 +2,7 @@ import Main from "./pages/Main";
 import Chat from "./pages/Chat";
 import Demo from './pages/Demo'
 import Question from "./pages/Question";
+import { Error } from "./pages/Error";
 import { Toastify } from "./components/Toastify";
 import MessageForm from './components/Message/Form';
 import MessageList from "./components/Message/List";
@@ -15,6 +16,7 @@ export {
   Chat,
   Question,
   Demo,
+  Error,
   Toastify,
   MessageForm,
   MessageList,
