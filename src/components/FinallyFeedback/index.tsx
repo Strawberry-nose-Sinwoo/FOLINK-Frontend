@@ -59,28 +59,36 @@ const Feedback = ({
         }
     };
 
-    return (
-        <div className={styles.overlay}>
-            <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.closeButton} onClick={() => setIsModal(false)}>X</div>
-                <h2 className={styles.title}>AI 면접관의 피드백</h2>
-                <img src={FinallyFeedbackIcon} alt="" width={150} />
-                <h3>전반적인 평가</h3>
-                <p className={styles.content}>{feedbackContent}</p>
-                <h3>면접관의 감정</h3>
-                <p className={styles.content}>{feedbackStrengths}</p>
-                <h3>전반적인 인상</h3>
-                <p className={styles.content}>{feedbackOverallImpression}</p>
-                <h3>개선 포인트</h3>
-                <p className={styles.content}>{feedbackImprovementPoints}</p>
-                <h3>추가 조언</h3>
-                <p className={styles.content}>{feedbackAdditionalAdvice}</p>
-                <button className={styles.meetOtherInterviewer} onClick={handlerClickButton}>
-                    {isLastQuestion ? '다른 면접관 만나기' : '다음 질문 넘어가기'}
-                </button>
-            </div>
-        </div>
-    );
+   return (
+     <div className={styles.overlay} onClick={() => setIsModal(false)}>
+       <div
+         className={styles.modalContainer}
+         onClick={e => e.stopPropagation()}
+       >
+         <div className={styles.closeButton} onClick={() => setIsModal(false)}>
+           X
+         </div>
+         <h2 className={styles.title}>AI 면접관의 피드백</h2>
+         <img src={FinallyFeedbackIcon} alt="" width={150} />
+         <h3>전반적인 평가</h3>
+         <p className={styles.content}>{feedbackContent}</p>
+         <h3>면접관의 감정</h3>
+         <p className={styles.content}>{feedbackStrengths}</p>
+         <h3>전반적인 인상</h3>
+         <p className={styles.content}>{feedbackOverallImpression}</p>
+         <h3>개선 포인트</h3>
+         <p className={styles.content}>{feedbackImprovementPoints}</p>
+         <h3>추가 조언</h3>
+         <p className={styles.content}>{feedbackAdditionalAdvice}</p>
+         <button
+           className={styles.meetOtherInterviewer}
+           onClick={handlerClickButton}
+         >
+           {isLastQuestion ? '다른 면접관 만나기' : '다음 질문 넘어가기'}
+         </button>
+       </div>
+     </div>
+   );
 };
 
 export default Feedback;
