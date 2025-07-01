@@ -75,24 +75,16 @@ const Chat = () => {
   }, [groupedQuestions]);
 
   useEffect(() => {
-    if (messages.length >= 10) {
+    if (messages.length >= 10 && selectedConversationId !== null) {
       handleFeedback(selectedConversationId);
-    } else {
-      setIsModal(false);
-    }
-  }, [messages, selectedConversationId, handleFeedback, setIsModal]);
-
-  useEffect(() => {
-    if (messages.length >= 10) {
-      handleFeedback(selectedConversationId);
-    } else if (messages.length < 10 && selectedConversationId !== null) {
+    } else if (selectedConversationId !== null) {
       setIsModal(false);
       setIsFeedback((prev: { [key: number]: boolean }) => ({
         ...prev,
         [selectedConversationId]: false,
       }));
     }
-  }, [messages, selectedConversationId, setIsFeedback, setIsModal]);
+  }, [messages, selectedConversationId, handleFeedback, setIsFeedback, setIsModal]);
 
   return (
     <main className={styles.container}>
@@ -129,8 +121,14 @@ const Chat = () => {
                           selectedConversationId === question.conversationId
                             ? styles.active
                             : ''
-                        } ${isFeedback[question.conversationId] ? styles.strikethrough : ''}`}
-                        onClick={() => handleQuestionClick(question.conversationId)}
+                        } ${
+                          isFeedback[question.conversationId]
+                            ? styles.strikethrough
+                            : ''
+                        }`}
+                        onClick={() =>
+                          handleQuestionClick(question.conversationId)
+                        }
                       >
                         {renderQuestion(question)}
                       </li>
@@ -151,14 +149,21 @@ const Chat = () => {
           <div className={styles.chatHeader}>
             {selectedConversationId && findSelectedQuestion() ? (
               <h2 className={styles.chatTitle}>
-                {findSelectedQuestion()?.title}: {findSelectedQuestion()?.question}
+                {findSelectedQuestion()?.title}:{' '}
+                {findSelectedQuestion()?.question}
               </h2>
             ) : (
               <h2 className={styles.chatTitle}>질문을 선택해주세요</h2>
             )}
           </div>
-          {messagesLoading || isLoadingFeedback ? (
+          {messagesLoading ? (
+            <Skeleton />
+          ) : isLoadingFeedback &&
+            messages.length >= 10 &&
+            selectedConversationId !== null &&
+            !isFeedback[selectedConversationId] ? (
             <>
+              <components.Loading type="feedback" />
               <Skeleton />
             </>
           ) : (
@@ -168,14 +173,15 @@ const Chat = () => {
               onEndTyping={handleEndTyping}
             />
           )}
-          {selectedConversationId !== null && isFeedback[selectedConversationId] && (
-            <div
-              onClick={() => setIsModal(true)}
-              className={styles.feedbackModalOnButton}
-            >
-              최종 피드백 보기
-            </div>
-          )}
+          {selectedConversationId !== null &&
+            isFeedback[selectedConversationId] && (
+              <div
+                onClick={() => setIsModal(true)}
+                className={styles.feedbackModalOnButton}
+              >
+                최종 피드백 보기
+              </div>
+            )}
           <div className={styles.message_form_container}>
             <components.MessageForm
               onSendMessage={handleSendMessage}
@@ -188,4 +194,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;  
+export default Chat;

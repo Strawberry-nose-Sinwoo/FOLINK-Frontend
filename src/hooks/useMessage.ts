@@ -55,7 +55,7 @@ export const useMessage = (conversationId: string) => {
     if (currentTypingId === null) {
       const nextTypingMessage = messages.find(
         msg => !msg.isUser && msg.isTyping
-      );
+      ); 
       if (nextTypingMessage) {
         setCurrentTypingId(nextTypingMessage.id);
         setTimeout(() => {

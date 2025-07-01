@@ -1,9 +1,10 @@
+import { Write } from '@/assets';
 import styles from './style.module.css';
 import { useState, useEffect } from 'react';
 
 interface LoadingProps {
   status?: 'loading' | 'success';
-  type: 'page' | 'question';
+  type: 'page' | 'question' | 'feedback';
   progress?: number; 
 }
 
@@ -55,6 +56,8 @@ export const Loading = ({ status, type, progress = 0 }: LoadingProps) => {
             </div>
           </div>
         );
+      case 'feedback':
+        return <img src={Write} alt="피드백 이미지" width={200}/>
       default:
         return null;
     }
