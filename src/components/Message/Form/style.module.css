@@ -1,47 +1,70 @@
 .message_form {
-    width: 96%;
-    background-color: #F6F5FA;
-    border-radius: 20px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 25px;
-  }
-  
+  width: 96%;
+  background-color: #F6F5FA;
+  border-radius: 20px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
 .message_input {
-    flex-grow: 1;
-    padding: 15px;
-    max-width: 100%;
-    border: none;
-    margin-right: 10px;
-    background: none;
+  flex-grow: 1;
+  padding: 15px;
+  max-width: 100%;
+  border: none;
+  margin-right: 10px;
+  background: none;
+  resize: none; 
+  overflow-y: auto; 
+  max-height: 150px; 
+  line-height: 1.5; 
+  box-sizing: border-box;
 
-    &:disabled {
-      opacity: 0.2;
-      cursor: not-allowed;      
-    }
+  &::-webkit-scrollbar {
+    width: 5px;
   }
-  
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
+}
+
 .send_button {
-    padding: 8px 8px;
-    border-radius: 100%;
-    max-width: 100%;
-    border: none;
-    background: #fff;
-    transition: all 0.15s ease-in-out;
-    font-size: 14px;
-    cursor: pointer;
-    margin-right: 10px;
+  padding: 8px;
+  border-radius: 100%;
+  max-width: 100%;
+  border: none;
+  background: #fff;
+  transition: all 0.15s ease-in-out;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
 
-    & img {
-      width: 25px;
-      height: 25px;
-      vertical-align: middle;
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;      
-    }
+  & img {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
   }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
